@@ -2,6 +2,7 @@ package com.lucasxavier.crmapi.domain.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +15,9 @@ public class Profissao implements Serializable {
     private Long id;
     @Column(name = "nome_profissao")
     private String nome;
+
+    @OneToMany(mappedBy = "profissao")
+    private List<Cliente> cliente;
 
     public Profissao(){}
 

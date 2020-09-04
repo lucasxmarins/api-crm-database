@@ -19,7 +19,7 @@ public class Montadora implements Serializable {
     private String nome;
 
     @OneToMany(mappedBy = "montadora")
-    private List<Carro> carro;
+    private List<Carro> carros;
 
     public Montadora(){}
 
@@ -45,8 +45,8 @@ public class Montadora implements Serializable {
     }
 
     @JsonIgnore
-    public List<Carro> getCarro() {
-        return carro;
+    public List<Carro> getCarros() {
+        return carros;
     }
 
     @Override

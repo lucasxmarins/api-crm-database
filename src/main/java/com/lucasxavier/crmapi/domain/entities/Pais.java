@@ -1,8 +1,11 @@
 package com.lucasxavier.crmapi.domain.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +17,9 @@ public class Pais implements Serializable {
     private String codigo;
     @Column(name = "nome_pais")
     private String nome;
+
+    @OneToMany(mappedBy = "pais")
+    private List<Cliente> clientes;
 
     public Pais(){}
 
@@ -36,6 +42,11 @@ public class Pais implements Serializable {
 
     public void setNome(String nome_pais) {
         this.nome = nome_pais;
+    }
+
+    @JsonIgnore
+    public List<Cliente> getClientes() {
+        return clientes;
     }
 
     @Override
