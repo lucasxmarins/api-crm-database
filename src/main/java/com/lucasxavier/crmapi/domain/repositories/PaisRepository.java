@@ -1,0 +1,13 @@
+package com.lucasxavier.crmapi.domain.repositories;
+
+import com.lucasxavier.crmapi.domain.entities.Pais;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+public interface PaisRepository extends JpaRepository<Pais, String> {
+
+    @Query(value = "SELECT * FROM pais p WHERE p.codigo_pais = UPPER(?1)", nativeQuery = true)
+    List<Pais> findByCod(String cod);
+}
