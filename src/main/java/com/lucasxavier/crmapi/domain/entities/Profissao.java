@@ -1,5 +1,7 @@
 package com.lucasxavier.crmapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -40,6 +42,11 @@ public class Profissao implements Serializable {
 
     public void setNome(String nome_profissao) {
         this.nome = nome_profissao;
+    }
+
+    @JsonIgnore
+    public List<Cliente> getCliente() {
+        return cliente;
     }
 
     @Override

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "cliente")
@@ -15,6 +17,7 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente")
     private Long id;
+
     private String primeiro_nome;
     private String ultimo_nome;
     private String email;
@@ -33,6 +36,9 @@ public class Cliente implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_profissao")
     private Profissao profissao;
+
+    @ManyToMany(mappedBy = "clientes")
+    private Set<Carro> carros = new HashSet<>();
 
     public Cliente(){}
 
@@ -138,6 +144,10 @@ public class Cliente implements Serializable {
 
     public void setProfissao(Profissao profissao) {
         this.profissao = profissao;
+    }
+
+    public Set<Carro> getCarros() {
+        return carros;
     }
 
     @Override

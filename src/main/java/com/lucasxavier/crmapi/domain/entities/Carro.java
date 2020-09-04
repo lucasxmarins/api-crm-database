@@ -1,8 +1,12 @@
 package com.lucasxavier.crmapi.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "carro_montadora")
@@ -18,6 +22,12 @@ public class Carro implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_montadora")
     private Montadora montadora;
+
+    @ManyToMany
+    @JoinTable(name = "carro_cliente",
+    joinColumns = @JoinColumn(name = "id_carro"),
+    inverseJoinColumns = @JoinColumn(name = "id_cliente"))
+    private Set<Cliente> clientes = new HashSet<>();
 
     public Carro(){}
 
@@ -49,6 +59,11 @@ public class Carro implements Serializable {
 
     public void setMontadora(Montadora montadora) {
         this.montadora = montadora;
+    }
+
+    @JsonIgnore
+    public Set<Cliente> getClientes() {
+        return clientes;
     }
 
     @Override
