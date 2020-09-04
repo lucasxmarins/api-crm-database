@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping(value = "api/profissoes")
 public class ProfissaoResource {
 
+    private final ProfissaoService service;
+
     @Autowired
-    private ProfissaoService service;
+    public ProfissaoResource(ProfissaoService service){
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Profissao>> findAll(){

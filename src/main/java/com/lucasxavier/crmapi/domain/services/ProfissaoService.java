@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class ProfissaoService implements Serializable {
 
+    private final ProfissaoRepository repository;
+
     @Autowired
-    private ProfissaoRepository repository;
+    public ProfissaoService(ProfissaoRepository repository){
+        this.repository = repository;
+    }
 
     public List<Profissao> findAll(){
         return repository.findAll();

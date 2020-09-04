@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping(value = "/api/paises")
 public class PaisResource implements Serializable {
 
+    private final PaisService service;
+
     @Autowired
-    private PaisService service;
+    public PaisResource(PaisService service){
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Pais>> findAll(){

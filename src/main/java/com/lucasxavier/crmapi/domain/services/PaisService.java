@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class PaisService implements Serializable {
 
+    private final PaisRepository repository;
+
     @Autowired
-    private PaisRepository repository;
+    public PaisService(PaisRepository repository){
+        this.repository = repository;
+    }
 
     public List<Pais> findAll(){
         return repository.findAll();

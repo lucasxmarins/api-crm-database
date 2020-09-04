@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping(value = "/api/montadoras")
 public class MontadoraResource implements Serializable {
 
+    private final MontadoraService service;
+
     @Autowired
-    private MontadoraService service;
+    public MontadoraResource(MontadoraService service){
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<Montadora>> findAll(){

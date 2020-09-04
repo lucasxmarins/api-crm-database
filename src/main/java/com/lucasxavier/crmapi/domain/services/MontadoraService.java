@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class MontadoraService implements Serializable {
 
+    private final MontadoraRepository repository;
+
     @Autowired
-    private MontadoraRepository repository;
+    public MontadoraService(MontadoraRepository repository){
+        this.repository = repository;
+    }
 
     public List<Montadora> findAll(){
         return repository.findAll();
