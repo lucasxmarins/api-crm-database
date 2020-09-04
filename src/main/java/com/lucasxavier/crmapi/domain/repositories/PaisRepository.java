@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PaisRepository extends JpaRepository<Pais, String> {
 
     @Query(value = "SELECT * FROM pais p WHERE p.codigo_pais = UPPER(?1)", nativeQuery = true)
-    List<Pais> findByCod(String cod);
+    Optional<List<Pais>> findByCod(String cod);
 }
