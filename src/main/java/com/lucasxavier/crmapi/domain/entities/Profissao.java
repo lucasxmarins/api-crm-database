@@ -10,30 +10,32 @@ public class Profissao implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_profissao;
-    private String nome_profissao;
+    @Column(name = "id_profissao")
+    private Long id;
+    @Column(name = "nome_profissao")
+    private String nome;
 
     public Profissao(){}
 
     public Profissao(Long id_profissao, String nome_profissao) {
-        this.id_profissao = id_profissao;
-        this.nome_profissao = nome_profissao;
+        this.id = id_profissao;
+        this.nome = nome_profissao;
     }
 
-    public Long getId_profissao() {
-        return id_profissao;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_profissao(Long id_profissao) {
-        this.id_profissao = id_profissao;
+    public void setId(Long id_profissao) {
+        this.id = id_profissao;
     }
 
-    public String getNome_profissao() {
-        return nome_profissao;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNome_profissao(String nome_profissao) {
-        this.nome_profissao = nome_profissao;
+    public void setNome(String nome_profissao) {
+        this.nome = nome_profissao;
     }
 
     @Override
@@ -41,11 +43,11 @@ public class Profissao implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Profissao profissao = (Profissao) o;
-        return Objects.equals(id_profissao, profissao.id_profissao);
+        return Objects.equals(id, profissao.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_profissao);
+        return Objects.hash(id);
     }
 }
