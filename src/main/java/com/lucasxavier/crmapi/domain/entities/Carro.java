@@ -1,6 +1,7 @@
 package com.lucasxavier.crmapi.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;

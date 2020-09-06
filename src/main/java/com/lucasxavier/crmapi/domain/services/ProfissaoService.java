@@ -1,11 +1,15 @@
 package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.entities.Profissao;
+import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.ProfissaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,5 +29,36 @@ public class ProfissaoService implements Serializable {
 
     public Profissao findById(Long id){
         return repository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
+    }
+
+    public Profissao insert(Profissao profissao){
+        return repository.save(profissao);
+    }
+
+    public void delete(Long id) {
+        try {
+            repository.deleteById(id);;
+        }
+        catch(EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public Profissao update(Long id, Profissao updated) {
+        try {
+            Profissao current = repository.getOne(id);
+            updateData(current, updated);
+            return repository.save(current);
+        }
+        catch(EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    private void updateData(Profissao current, Profissao updated) {
+        current.setNome(updated.getNome());
     }
 }

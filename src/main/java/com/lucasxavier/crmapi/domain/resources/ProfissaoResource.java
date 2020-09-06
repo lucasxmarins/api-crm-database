@@ -4,11 +4,10 @@ import com.lucasxavier.crmapi.domain.entities.Profissao;
 import com.lucasxavier.crmapi.domain.services.ProfissaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -31,4 +30,27 @@ public class ProfissaoResource {
     public ResponseEntity<Profissao> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(service.findById(id));
     }
+
+    @PostMapping
+    public ResponseEntity<Profissao> insert(@RequestBody Profissao profissao){
+        service.insert(profissao);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(profissao.getId()).toUri(); //java.net.uri
+        return ResponseEntity.created(uri).body(profissao);
+
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Profissao> update(@PathVariable Long id, @RequestBody Profissao profissao){
+        service.update(id, profissao);
+        return ResponseEntity.ok().body(profissao);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Profissao> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
