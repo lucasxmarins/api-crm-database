@@ -42,8 +42,7 @@ public class ProfissaoResource {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Profissao> update(@PathVariable Long id, @RequestBody Profissao profissao){
-        service.update(id, profissao);
-        return ResponseEntity.ok().body(profissao);
+        return ResponseEntity.ok().body(service.update(id, profissao));
     }
 
     @DeleteMapping(value = "/{id}")

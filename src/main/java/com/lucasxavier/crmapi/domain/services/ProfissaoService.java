@@ -32,12 +32,17 @@ public class ProfissaoService implements Serializable {
     }
 
     public Profissao insert(Profissao profissao){
-        return repository.save(profissao);
+        try {
+            return repository.save(profissao);
+        }
+        catch (DataIntegrityViolationException e){
+            throw new DatabaseException(e.getMessage());
+        }
     }
 
     public void delete(Long id) {
         try {
-            repository.deleteById(id);;
+            repository.deleteById(id);
         }
         catch(EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(id);
@@ -55,6 +60,9 @@ public class ProfissaoService implements Serializable {
         }
         catch(EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
+        }
+        catch (DataIntegrityViolationException e){
+            throw new DatabaseException(e.getMessage());
         }
     }
 
