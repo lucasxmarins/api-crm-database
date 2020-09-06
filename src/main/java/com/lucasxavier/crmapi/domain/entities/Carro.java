@@ -1,6 +1,7 @@
 package com.lucasxavier.crmapi.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "carro_montadora")
-public class Carro implements Serializable {
+public class Carro extends RepresentationModel<Carro> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class Carro implements Serializable {
     @JoinTable(name = "carro_cliente",
     joinColumns = @JoinColumn(name = "id_carro"),
     inverseJoinColumns = @JoinColumn(name = "id_cliente"))
-    private Set<Cliente> clientes = new HashSet<>();
+    private final Set<Cliente> clientes = new HashSet<>();
 
     public Carro(){}
 

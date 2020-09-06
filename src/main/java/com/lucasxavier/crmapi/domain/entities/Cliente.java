@@ -38,7 +38,7 @@ public class Cliente implements Serializable {
     private Profissao profissao;
 
     @ManyToMany(mappedBy = "clientes")
-    private Set<Carro> carros = new HashSet<>();
+    private final Set<Carro> carros = new HashSet<>();
 
     public Cliente(){}
 
