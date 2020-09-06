@@ -6,6 +6,7 @@ import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.PaisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -61,6 +62,9 @@ public class PaisService implements Serializable {
         }
         catch (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException(e.getMessage());
         }
     }
 
