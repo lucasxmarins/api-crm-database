@@ -3,13 +3,13 @@ package com.lucasxavier.crmapi.domain.resources;
 import com.lucasxavier.crmapi.domain.entities.Carro;
 import com.lucasxavier.crmapi.domain.services.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.sql.rowset.CachedRowSet;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -42,6 +42,24 @@ public class CarroResource implements Serializable {
                 .findById(carro.getId())).withSelfRel());
 
         return ResponseEntity.ok().body(carro);
+    }
+
+    @PostMapping
+    public ResponseEntity<Carro> insert(@RequestBody Carro carro){
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(carro.getId()).toUri();
+        return ResponseEntity.created(uri).body(service.insert(carro));
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Carro> insert(@PathVariable Long id, @RequestBody Carro carro){
+        return ResponseEntity.ok().body(service.update(id, carro));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Carro> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 
