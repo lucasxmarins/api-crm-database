@@ -7,4 +7,4 @@ A API se conecta com um banco de dados CRM (Customer relationship management) qu
 
 # Modelo do banco de dados CRM
 O modelo abaixo determina as relações das entidades.
-<img src="imagens/db.png" height="500">
+<img src="imagens/db.PNG" height="400">
