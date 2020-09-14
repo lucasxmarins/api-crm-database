@@ -1,7 +1,6 @@
 package com.lucasxavier.crmapi.domain.data.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "carro_montadora")
-public class CarroVO extends RepresentationModel<CarroVO> implements Serializable {
+public class Carro /*extends RepresentationModel<CarroVO> */ implements Serializable {
 
     private static final long serialVersionUID = 8336025879869293420L;
     @Id
@@ -31,10 +30,10 @@ public class CarroVO extends RepresentationModel<CarroVO> implements Serializabl
             inverseJoinColumns = @JoinColumn(name = "id_cliente"))
     private final Set<Cliente> clientes = new HashSet<>();
 
-    public CarroVO() {
+    public Carro() {
     }
 
-    public CarroVO(Long id_carro, String nome_carro, Montadora montadora) {
+    public Carro(Long id_carro, String nome_carro, Montadora montadora) {
         this.id = id_carro;
         this.nome = nome_carro;
         this.montadora = montadora;
@@ -73,7 +72,7 @@ public class CarroVO extends RepresentationModel<CarroVO> implements Serializabl
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CarroVO carro = (CarroVO) o;
+        Carro carro = (Carro) o;
         return Objects.equals(id, carro.id);
     }
 

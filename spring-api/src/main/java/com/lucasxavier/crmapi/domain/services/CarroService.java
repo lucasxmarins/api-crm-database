@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.services;
 
-import com.lucasxavier.crmapi.domain.data.models.CarroVO;
+import com.lucasxavier.crmapi.domain.data.models.Carro;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroRepository;
@@ -22,15 +22,15 @@ public class CarroService implements Serializable {
         this.repository = repository;
     }
 
-    public List<CarroVO> findAll() {
+    public List<Carro> findAll() {
         return repository.findAll();
     }
 
-    public CarroVO findById(Long id) {
+    public Carro findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public CarroVO insert(CarroVO carro) {
+    public Carro insert(Carro carro) {
         try {
             return repository.save(carro);
         } catch (DataIntegrityViolationException e) {
@@ -48,9 +48,9 @@ public class CarroService implements Serializable {
         }
     }
 
-    public CarroVO update(Long id, CarroVO updated) {
+    public Carro update(Long id, Carro updated) {
         try {
-            CarroVO current = repository.getOne(id);
+            Carro current = repository.getOne(id);
             updateData(current, updated);
             return repository.save(current);
         } catch (DataIntegrityViolationException e) {
@@ -60,7 +60,7 @@ public class CarroService implements Serializable {
         }
     }
 
-    private void updateData(CarroVO current, CarroVO update) {
+    private void updateData(Carro current, Carro update) {
         current.setNome(update.getNome());
         current.setMontadora(update.getMontadora());
     }

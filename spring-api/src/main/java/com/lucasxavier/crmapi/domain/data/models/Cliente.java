@@ -39,7 +39,7 @@ public class Cliente implements Serializable {
     private Profissao profissao;
 
     @ManyToMany(mappedBy = "clientes")
-    private final Set<CarroVO> carros = new HashSet<>();
+    private final Set<Carro> carros = new HashSet<>();
 
     public Cliente() {
     }
@@ -148,7 +148,7 @@ public class Cliente implements Serializable {
         this.profissao = profissao;
     }
 
-    public Set<CarroVO> getCarros() {
+    public Set<Carro> getCarros() {
         return carros;
     }
 
