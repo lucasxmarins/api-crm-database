@@ -1,5 +1,6 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
 import com.lucasxavier.crmapi.domain.services.ProfissaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class ProfissaoController {
         this.service = service;
     }
 
+    // Basic CRUD
     @GetMapping
     public ResponseEntity<List<ProfissaoDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
@@ -49,6 +51,7 @@ public class ProfissaoController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
 
 
 }

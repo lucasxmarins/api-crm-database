@@ -1,6 +1,7 @@
 package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.converters.DozerConverter;
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.Profissao;
 import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
@@ -69,4 +70,5 @@ public class ProfissaoService {
     private void updateData(Profissao current, Profissao updated) {
         current.setNome(updated.getNome());
     }
+
 }

@@ -1,7 +1,8 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.PaisDTO;
-import com.lucasxavier.crmapi.domain.data.models.Pais;
+import com.lucasxavier.crmapi.domain.services.ClienteService;
 import com.lucasxavier.crmapi.domain.services.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ import java.util.List;
 public class PaisController {
 
     private final PaisService service;
+    private final ClienteService clienteService;
 
     @Autowired
-    public PaisController(PaisService service) {
+    public PaisController(PaisService service, ClienteService clienteService) {
         this.service = service;
+        this.clienteService = clienteService;
     }
 
     @GetMapping
@@ -51,5 +54,11 @@ public class PaisController {
         service.delete(cod);
         return ResponseEntity.noContent().build();
 
+    }
+
+    // Associated methods
+    @GetMapping(value = "/{cod}/clientes")
+    public ResponseEntity<List<ClienteDTO>> getClientes(@PathVariable String cod){
+        return ResponseEntity.ok().body(clienteService.findClientsPerCountry(cod));
     }
 }
