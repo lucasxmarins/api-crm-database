@@ -1,5 +1,7 @@
 package com.lucasxavier.crmapi.domain.services;
 
+import com.lucasxavier.crmapi.domain.converters.DozerConverter;
+import com.lucasxavier.crmapi.domain.data.dto.MontadoraDTO;
 import com.lucasxavier.crmapi.domain.data.models.Montadora;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
@@ -21,17 +23,20 @@ public class MontadoraService {
         this.repository = repository;
     }
 
-    public List<Montadora> findAll() {
-        return repository.findAll();
+    public List<MontadoraDTO> findAll() {
+        return DozerConverter.parseListObjects(repository.findAll(), MontadoraDTO.class);
     }
 
-    public Montadora findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    public MontadoraDTO findById(Long id) {
+        var montadora = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        return DozerConverter.parseObject(montadora, MontadoraDTO.class);
     }
 
-    public Montadora insert(Montadora montadora) {
+    public MontadoraDTO insert(MontadoraDTO montadoraDTO) {
         try {
-            return repository.save(montadora);
+            var montadora = DozerConverter.parseObject(montadoraDTO, Montadora.class);
+            return DozerConverter.parseObject(repository.save(montadora), MontadoraDTO.class);
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -40,6 +45,7 @@ public class MontadoraService {
     public void delete(Long id) {
         try {
             repository.deleteById(id);
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         } catch (EmptyResultDataAccessException e) {
@@ -47,11 +53,12 @@ public class MontadoraService {
         }
     }
 
-    public Montadora update(Long id, Montadora updated) {
+    public MontadoraDTO update(Long id, MontadoraDTO updated) {
         try {
             Montadora current = repository.getOne(id);
-            updateData(current, updated);
-            return repository.save(current);
+            updateData(current, DozerConverter.parseObject(updated, Montadora.class));
+            return DozerConverter.parseObject(repository.save(current), MontadoraDTO.class);
+
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(e.getMessage());
         } catch (DataIntegrityViolationException e) {

@@ -1,29 +1,20 @@
-package com.lucasxavier.crmapi.domain.data.models;
+package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import com.lucasxavier.crmapi.domain.data.models.Carro;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "montadora")
-public class Montadora {
+public class MontadoraDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_montadora")
     private Long id;
-    @Column(name = "nome_montadora")
     private String nome;
-
-    @OneToMany(mappedBy = "montadora")
     private List<Carro> carros;
 
-    public Montadora() {
+    public MontadoraDTO() {
     }
 
-    public Montadora(Long id_montadora, String nome_montadora) {
+    public MontadoraDTO(Long id_montadora, String nome_montadora) {
         this.id = id_montadora;
         this.nome = nome_montadora;
     }
@@ -44,6 +35,7 @@ public class Montadora {
         this.nome = nome_montadora;
     }
 
+    @JsonIgnore
     public List<Carro> getCarros() {
         return carros;
     }
@@ -52,12 +44,14 @@ public class Montadora {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Montadora montadora = (Montadora) o;
-        return Objects.equals(id, montadora.id);
+        MontadoraDTO that = (MontadoraDTO) o;
+        return id.equals(that.id) &&
+                nome.equals(that.nome) &&
+                Objects.equals(carros, that.carros);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, nome, carros);
     }
 }
