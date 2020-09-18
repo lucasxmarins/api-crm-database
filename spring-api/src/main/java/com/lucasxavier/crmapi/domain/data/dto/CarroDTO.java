@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.data.vo;
+package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class CarroVO implements Serializable {
+public class CarroDTO implements Serializable {
     private static final long serialVersionUID = -6488625267004062221L;
 
     private Long id;
@@ -18,10 +18,10 @@ public class CarroVO implements Serializable {
 
     private final Set<Cliente> clientes = new HashSet<>();
 
-    public CarroVO() {
+    public CarroDTO() {
     }
 
-    public CarroVO(Long id_carro, String nome_carro, Montadora montadora) {
+    public CarroDTO(Long id_carro, String nome_carro, Montadora montadora) {
         this.id = id_carro;
         this.nome = nome_carro;
         this.montadora = montadora;
@@ -61,7 +61,7 @@ public class CarroVO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        CarroVO carroVO = (CarroVO) o;
+        CarroDTO carroVO = (CarroDTO) o;
         return id.equals(carroVO.id) &&
                 nome.equals(carroVO.nome) &&
                 Objects.equals(montadora, carroVO.montadora) &&

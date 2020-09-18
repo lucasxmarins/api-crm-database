@@ -2,7 +2,7 @@ package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.converters.DozerConverter;
 import com.lucasxavier.crmapi.domain.data.models.Profissao;
-import com.lucasxavier.crmapi.domain.data.vo.ProfissaoVO;
+import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.ProfissaoRepository;
@@ -24,20 +24,20 @@ public class ProfissaoService {
         this.repository = repository;
     }
 
-    public List<ProfissaoVO> findAll() {
-        return DozerConverter.parseListObjects(repository.findAll(), ProfissaoVO.class);
+    public List<ProfissaoDTO> findAll() {
+        return DozerConverter.parseListObjects(repository.findAll(), ProfissaoDTO.class);
     }
 
-    public ProfissaoVO findById(Long id) {
+    public ProfissaoDTO findById(Long id) {
         var profissao = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        return DozerConverter.parseObject(profissao, ProfissaoVO.class);
+        return DozerConverter.parseObject(profissao, ProfissaoDTO.class);
     }
 
-    public ProfissaoVO insert(ProfissaoVO profissaoVO) {
+    public ProfissaoDTO insert(ProfissaoDTO profissaoVO) {
         try {
 
             var profissao = DozerConverter.parseObject(profissaoVO, Profissao.class);
-            return DozerConverter.parseObject(repository.save(profissao), ProfissaoVO.class);
+            return DozerConverter.parseObject(repository.save(profissao), ProfissaoDTO.class);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
@@ -54,11 +54,11 @@ public class ProfissaoService {
         }
     }
 
-    public ProfissaoVO update(Long id, ProfissaoVO updated) {
+    public ProfissaoDTO update(Long id, ProfissaoDTO updated) {
         try {
             Profissao current = repository.getOne(id);
             updateData(current, DozerConverter.parseObject(updated, Profissao.class));
-            return DozerConverter.parseObject(repository.save(current), ProfissaoVO.class);
+            return DozerConverter.parseObject(repository.save(current), ProfissaoDTO.class);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         } catch (DataIntegrityViolationException e) {

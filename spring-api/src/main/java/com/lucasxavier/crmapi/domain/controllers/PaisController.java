@@ -1,5 +1,6 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.data.dto.PaisDTO;
 import com.lucasxavier.crmapi.domain.data.models.Pais;
 import com.lucasxavier.crmapi.domain.services.PaisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,17 @@ public class PaisController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Pais>> findAll() {
+    public ResponseEntity<List<PaisDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping(value = "/{cod}")
-    public ResponseEntity<List<Pais>> findById(@PathVariable String cod) {
+    public ResponseEntity<List<PaisDTO>> findById(@PathVariable String cod) {
         return ResponseEntity.ok().body(service.findByCod(cod));
     }
 
     @PostMapping
-    public ResponseEntity<Pais> insert(@RequestBody Pais pais) {
+    public ResponseEntity<PaisDTO> insert(@RequestBody PaisDTO pais) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{cod}").buildAndExpand(pais.getCodigo()).toUri();
         return ResponseEntity.created(uri).body(service.insert(pais));
@@ -41,12 +42,12 @@ public class PaisController {
     }
 
     @PutMapping(value = "/{cod}")
-    public ResponseEntity<Pais> update(@PathVariable String cod, @RequestBody Pais pais) {
+    public ResponseEntity<PaisDTO> update(@PathVariable String cod, @RequestBody PaisDTO pais) {
         return ResponseEntity.ok().body(service.update(cod, pais));
     }
 
     @DeleteMapping(value = "/{cod}")
-    public ResponseEntity<Pais> delete(@PathVariable String cod) {
+    public ResponseEntity<PaisDTO> delete(@PathVariable String cod) {
         service.delete(cod);
         return ResponseEntity.noContent().build();
 

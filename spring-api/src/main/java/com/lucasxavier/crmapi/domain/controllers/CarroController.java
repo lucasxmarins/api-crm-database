@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
-import com.lucasxavier.crmapi.domain.data.vo.CarroVO;
+import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
 import com.lucasxavier.crmapi.domain.services.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,32 +22,32 @@ public class CarroController{
     }
 
     @GetMapping
-    public ResponseEntity<List<CarroVO>> findAll() {
+    public ResponseEntity<List<CarroDTO>> findAll() {
 
-        List<CarroVO> carros = service.findAll();
+        List<CarroDTO> carros = service.findAll();
         return ResponseEntity.ok().body(carros);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CarroVO> findById(@PathVariable Long id) {
-        CarroVO carro = service.findById(id);
+    public ResponseEntity<CarroDTO> findById(@PathVariable Long id) {
+        CarroDTO carro = service.findById(id);
         return ResponseEntity.ok().body(carro);
     }
 
     @PostMapping
-    public ResponseEntity<CarroVO> insert(@RequestBody CarroVO carro) {
+    public ResponseEntity<CarroDTO> insert(@RequestBody CarroDTO carro) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(carro.getId()).toUri();
         return ResponseEntity.created(uri).body(service.insert(carro));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CarroVO> insert(@PathVariable Long id, @RequestBody CarroVO carro) {
+    public ResponseEntity<CarroDTO> insert(@PathVariable Long id, @RequestBody CarroDTO carro) {
         return ResponseEntity.ok().body(service.update(id, carro));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<CarroVO> delete(@PathVariable Long id) {
+    public ResponseEntity<CarroDTO> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

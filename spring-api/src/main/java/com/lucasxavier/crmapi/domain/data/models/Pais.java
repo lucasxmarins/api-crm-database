@@ -44,7 +44,6 @@ public class Pais {
         this.nome = nome_pais;
     }
 
-    @JsonIgnore
     public List<Cliente> getClientes() {
         return clientes;
     }
