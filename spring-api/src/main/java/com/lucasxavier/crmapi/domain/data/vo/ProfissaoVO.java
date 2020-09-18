@@ -1,29 +1,23 @@
-package com.lucasxavier.crmapi.domain.data.models;
+package com.lucasxavier.crmapi.domain.data.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lucasxavier.crmapi.domain.data.models.Cliente;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "profissao")
-public class Profissao {
+public class ProfissaoVO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_profissao")
+    private static final long serialVersionUID = 8098906860713019991L;
     private Long id;
-    @Column(name = "nome_profissao")
     private String nome;
-
-    @OneToMany(mappedBy = "profissao")
     private List<Cliente> cliente;
 
-    public Profissao() {
+    public ProfissaoVO() {
     }
 
-    public Profissao(Long id_profissao, String nome_profissao) {
+    public ProfissaoVO(Long id_profissao, String nome_profissao) {
         this.id = id_profissao;
         this.nome = nome_profissao;
     }
@@ -53,12 +47,14 @@ public class Profissao {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Profissao profissao = (Profissao) o;
-        return Objects.equals(id, profissao.id);
+        ProfissaoVO that = (ProfissaoVO) o;
+        return id.equals(that.id) &&
+                nome.equals(that.nome) &&
+                Objects.equals(cliente, that.cliente);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, nome, cliente);
     }
 }

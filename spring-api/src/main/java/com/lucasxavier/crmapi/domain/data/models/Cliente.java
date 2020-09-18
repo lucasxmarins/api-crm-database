@@ -3,7 +3,6 @@ package com.lucasxavier.crmapi.domain.data.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,9 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente implements Serializable {
+public class Cliente {
 
-    private static final long serialVersionUID = 7698503500919540013L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente")

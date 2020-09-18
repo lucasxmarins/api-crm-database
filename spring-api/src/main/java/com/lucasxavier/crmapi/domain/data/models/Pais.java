@@ -4,15 +4,13 @@ package com.lucasxavier.crmapi.domain.data.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "pais")
-public class Pais implements Serializable {
+public class Pais {
 
-    private static final long serialVersionUID = 2121951235603131478L;
     @Id
     @Column(name = "codigo_pais")
     private String codigo;

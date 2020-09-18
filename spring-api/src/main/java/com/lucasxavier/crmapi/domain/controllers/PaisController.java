@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.resources;
+package com.lucasxavier.crmapi.domain.controllers;
 
 import com.lucasxavier.crmapi.domain.data.models.Pais;
 import com.lucasxavier.crmapi.domain.services.PaisService;
@@ -7,18 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/paises")
-public class PaisResource implements Serializable {
+public class PaisController {
 
     private final PaisService service;
 
     @Autowired
-    public PaisResource(PaisService service) {
+    public PaisController(PaisService service) {
         this.service = service;
     }
 

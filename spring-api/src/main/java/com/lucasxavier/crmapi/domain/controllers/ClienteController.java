@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.resources;
+package com.lucasxavier.crmapi.domain.controllers;
 
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
@@ -7,18 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/clientes")
-public class ClienteResource implements Serializable {
+public class ClienteController{
 
     private final ClienteService service;
 
     @Autowired
-    public ClienteResource(ClienteService service) {
+    public ClienteController(ClienteService service) {
         this.service = service;
     }
 

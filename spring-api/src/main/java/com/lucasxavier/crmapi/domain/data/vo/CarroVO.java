@@ -1,17 +1,17 @@
 package com.lucasxavier.crmapi.domain.data.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.data.models.Montadora;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class CarroVO extends RepresentationModel<CarroVO> implements Serializable {
-
+public class CarroVO implements Serializable {
     private static final long serialVersionUID = -6488625267004062221L;
+
     private Long id;
     private String nome;
     private Montadora montadora;
@@ -51,6 +51,7 @@ public class CarroVO extends RepresentationModel<CarroVO> implements Serializabl
         this.montadora = montadora;
     }
 
+    @JsonIgnore
     public Set<Cliente> getClientes() {
         return clientes;
     }
@@ -61,11 +62,14 @@ public class CarroVO extends RepresentationModel<CarroVO> implements Serializabl
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         CarroVO carroVO = (CarroVO) o;
-        return Objects.equals(id, carroVO.id);
+        return id.equals(carroVO.id) &&
+                nome.equals(carroVO.nome) &&
+                Objects.equals(montadora, carroVO.montadora) &&
+                Objects.equals(clientes, carroVO.clientes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
+        return Objects.hash(super.hashCode(), id, nome, montadora, clientes);
     }
 }

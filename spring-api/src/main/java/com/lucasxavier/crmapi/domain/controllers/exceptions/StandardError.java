@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.resources.exceptions;
+package com.lucasxavier.crmapi.domain.controllers.exceptions;
 
 import java.io.Serializable;
 import java.time.Instant;

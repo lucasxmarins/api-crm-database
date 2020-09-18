@@ -3,15 +3,13 @@ package com.lucasxavier.crmapi.domain.data.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "montadora")
-public class Montadora implements Serializable {
+public class Montadora {
 
-    private static final long serialVersionUID = -3925455975257073207L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_montadora")

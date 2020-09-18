@@ -3,16 +3,14 @@ package com.lucasxavier.crmapi.domain.data.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "carro_montadora")
-public class Carro /*extends RepresentationModel<CarroVO> */ implements Serializable {
+public class Carro {
 
-    private static final long serialVersionUID = 8336025879869293420L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_carro")
@@ -63,7 +61,6 @@ public class Carro /*extends RepresentationModel<CarroVO> */ implements Serializ
         this.montadora = montadora;
     }
 
-    @JsonIgnore
     public Set<Cliente> getClientes() {
         return clientes;
     }

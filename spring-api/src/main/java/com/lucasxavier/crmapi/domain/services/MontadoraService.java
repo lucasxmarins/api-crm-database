@@ -9,11 +9,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Service
-public class MontadoraService implements Serializable {
+public class MontadoraService {
 
     private final MontadoraRepository repository;
 

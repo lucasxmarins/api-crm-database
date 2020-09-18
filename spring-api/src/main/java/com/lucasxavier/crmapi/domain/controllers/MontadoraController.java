@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.resources;
+package com.lucasxavier.crmapi.domain.controllers;
 
 import com.lucasxavier.crmapi.domain.data.models.Montadora;
 import com.lucasxavier.crmapi.domain.services.MontadoraService;
@@ -7,18 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/montadoras")
-public class MontadoraResource implements Serializable {
+public class MontadoraController {
 
     private final MontadoraService service;
 
     @Autowired
-    public MontadoraResource(MontadoraService service) {
+    public MontadoraController(MontadoraService service) {
         this.service = service;
     }
 

@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.resources.exceptions;
+package com.lucasxavier.crmapi.domain.controllers.exceptions;
 
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;

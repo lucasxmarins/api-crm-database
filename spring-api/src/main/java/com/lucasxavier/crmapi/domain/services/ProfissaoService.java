@@ -1,6 +1,8 @@
 package com.lucasxavier.crmapi.domain.services;
 
+import com.lucasxavier.crmapi.domain.converters.DozerConverter;
 import com.lucasxavier.crmapi.domain.data.models.Profissao;
+import com.lucasxavier.crmapi.domain.data.vo.ProfissaoVO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.ProfissaoRepository;
@@ -10,11 +12,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.Serializable;
 import java.util.List;
 
 @Service
-public class ProfissaoService implements Serializable {
+public class ProfissaoService {
 
     private final ProfissaoRepository repository;
 
@@ -23,17 +24,21 @@ public class ProfissaoService implements Serializable {
         this.repository = repository;
     }
 
-    public List<Profissao> findAll() {
-        return repository.findAll();
+    public List<ProfissaoVO> findAll() {
+        return DozerConverter.parseListObjects(repository.findAll(), ProfissaoVO.class);
     }
 
-    public Profissao findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    public ProfissaoVO findById(Long id) {
+        var profissao = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        return DozerConverter.parseObject(profissao, ProfissaoVO.class);
     }
 
-    public Profissao insert(Profissao profissao) {
+    public ProfissaoVO insert(ProfissaoVO profissaoVO) {
         try {
-            return repository.save(profissao);
+
+            var profissao = DozerConverter.parseObject(profissaoVO, Profissao.class);
+            return DozerConverter.parseObject(repository.save(profissao), ProfissaoVO.class);
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -49,11 +54,11 @@ public class ProfissaoService implements Serializable {
         }
     }
 
-    public Profissao update(Long id, Profissao updated) {
+    public ProfissaoVO update(Long id, ProfissaoVO updated) {
         try {
             Profissao current = repository.getOne(id);
-            updateData(current, updated);
-            return repository.save(current);
+            updateData(current, DozerConverter.parseObject(updated, Profissao.class));
+            return DozerConverter.parseObject(repository.save(current), ProfissaoVO.class);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         } catch (DataIntegrityViolationException e) {

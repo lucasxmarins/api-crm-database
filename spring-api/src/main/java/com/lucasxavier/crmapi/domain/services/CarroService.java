@@ -1,6 +1,8 @@
 package com.lucasxavier.crmapi.domain.services;
 
+import com.lucasxavier.crmapi.domain.converters.DozerConverter;
 import com.lucasxavier.crmapi.domain.data.models.Carro;
+import com.lucasxavier.crmapi.domain.data.vo.CarroVO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroRepository;
@@ -9,11 +11,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Service
-public class CarroService implements Serializable {
+public class CarroService {
 
     private final CarroRepository repository;
 
@@ -22,17 +23,20 @@ public class CarroService implements Serializable {
         this.repository = repository;
     }
 
-    public List<Carro> findAll() {
-        return repository.findAll();
+    public List<CarroVO> findAll() {
+        return DozerConverter.parseListObjects(repository.findAll(), CarroVO.class);
     }
 
-    public Carro findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    public CarroVO findById(Long id) {
+        var carro = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        return DozerConverter.parseObject(carro, CarroVO.class);
     }
 
-    public Carro insert(Carro carro) {
+    public CarroVO insert(CarroVO carroVO) {
         try {
-            return repository.save(carro);
+            var carro = DozerConverter.parseObject(carroVO, Carro.class);
+            return DozerConverter.parseObject(repository.save(carro), CarroVO.class);
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -48,11 +52,12 @@ public class CarroService implements Serializable {
         }
     }
 
-    public Carro update(Long id, Carro updated) {
+    public CarroVO update(Long id, CarroVO updated) {
         try {
             Carro current = repository.getOne(id);
-            updateData(current, updated);
-            return repository.save(current);
+            updateData(current, DozerConverter.parseObject(updated, Carro.class));
+
+            return DozerConverter.parseObject(repository.save(current), CarroVO.class);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         } catch (EmptyResultDataAccessException e) {
