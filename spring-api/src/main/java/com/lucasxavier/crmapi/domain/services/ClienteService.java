@@ -3,7 +3,6 @@ package com.lucasxavier.crmapi.domain.services;
 import com.lucasxavier.crmapi.domain.converters.DozerConverter;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
-import com.lucasxavier.crmapi.domain.data.models.Pais;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.ClienteRepository;
@@ -77,8 +76,12 @@ public class ClienteService {
         current.setEmpresa(updated.getEmpresa());
     }
 
+    // Associated Methods
     public List<ClienteDTO> findClientsPerCountry(String cod){
-        return DozerConverter.parseListObjects(repository.findAllClients(cod), ClienteDTO.class);
+        return DozerConverter.parseListObjects(repository.findClientsPerCountry(cod), ClienteDTO.class);
     }
 
+    public List<ClienteDTO> findClientsPerJob(Long id){
+        return DozerConverter.parseListObjects(repository.findClientsPerJob(id), ClienteDTO.class);
+    }
 }

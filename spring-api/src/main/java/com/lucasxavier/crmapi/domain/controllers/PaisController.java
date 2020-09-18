@@ -56,7 +56,7 @@ public class PaisController {
 
     }
 
-    // Associated methods
+    // Associated Getter
     @GetMapping(value = "/{cod}/clientes")
     public ResponseEntity<List<ClienteDTO>> getClientes(@PathVariable String cod){
         return ResponseEntity.ok().body(clienteService.findClientsPerCountry(cod));

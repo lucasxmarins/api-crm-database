@@ -1,7 +1,9 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.converters.DozerConverter;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
+import com.lucasxavier.crmapi.domain.services.ClienteService;
 import com.lucasxavier.crmapi.domain.services.ProfissaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,12 @@ import java.util.List;
 public class ProfissaoController {
 
     private final ProfissaoService service;
+    private final ClienteService clienteService;
 
     @Autowired
-    public ProfissaoController(ProfissaoService service) {
+    public ProfissaoController(ProfissaoService service, ClienteService clienteService) {
         this.service = service;
+        this.clienteService = clienteService;
     }
 
     // Basic CRUD
@@ -50,6 +54,12 @@ public class ProfissaoController {
     public ResponseEntity<ProfissaoDTO> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Associated Getter
+    @GetMapping(value = "/{id}/clientes")
+    public ResponseEntity<List<ClienteDTO>> findClientsPerJob(@PathVariable long id){
+        return ResponseEntity.ok().body(clienteService.findClientsPerJob(id));
     }
 
 

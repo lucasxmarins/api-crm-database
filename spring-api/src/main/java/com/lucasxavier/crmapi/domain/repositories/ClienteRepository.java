@@ -9,5 +9,8 @@ import java.util.List;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     @Query(value = "SELECT * FROM cliente WHERE codigo_pais = ?1 ", nativeQuery = true)
-    List<Cliente> findAllClients(String cod);
+    List<Cliente> findClientsPerCountry(String cod);
+
+    @Query(value = "SELECT * FROM cliente WHERE id_profissao = ?1 ", nativeQuery = true)
+    List<Cliente> findClientsPerJob(long id);
 }
