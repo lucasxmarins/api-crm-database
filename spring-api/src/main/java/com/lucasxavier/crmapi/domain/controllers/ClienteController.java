@@ -1,5 +1,6 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,30 +23,30 @@ public class ClienteController{
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> findAll() {
+    public ResponseEntity<List<ClienteDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Cliente> findById(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> insert(@RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteDTO> insert(@RequestBody ClienteDTO cliente) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(cliente.getId()).toUri();
         return ResponseEntity.created(uri).body(service.insert(cliente));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Cliente> delete(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Cliente> update(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO cliente) {
         return ResponseEntity.ok().body(service.update(id, cliente));
     }
 }

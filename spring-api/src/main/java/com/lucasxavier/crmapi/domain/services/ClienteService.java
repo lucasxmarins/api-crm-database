@@ -1,5 +1,7 @@
 package com.lucasxavier.crmapi.domain.services;
 
+import com.lucasxavier.crmapi.domain.converters.DozerConverter;
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
@@ -21,17 +23,19 @@ public class ClienteService {
         this.repository = repository;
     }
 
-    public List<Cliente> findAll() {
-        return repository.findAll();
+    public List<ClienteDTO> findAll() {
+        return DozerConverter.parseListObjects(repository.findAll(), ClienteDTO.class);
     }
 
-    public Cliente findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    public ClienteDTO findById(Long id) {
+        var cliente = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        return DozerConverter.parseObject(cliente, ClienteDTO.class);
     }
 
-    public Cliente insert(Cliente cliente) {
+    public ClienteDTO insert(ClienteDTO clienteDTO) {
         try {
-            return repository.save(cliente);
+            var cliente = DozerConverter.parseObject(clienteDTO, Cliente.class);
+            return DozerConverter.parseObject(repository.save(cliente), ClienteDTO.class);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -47,11 +51,11 @@ public class ClienteService {
         }
     }
 
-    public Cliente update(Long id, Cliente updated) {
+    public ClienteDTO update(Long id, ClienteDTO updated) {
         try {
             Cliente current = repository.getOne(id);
-            updateData(current, updated);
-            return repository.save(current);
+            updateData(current, DozerConverter.parseObject(updated, Cliente.class));
+            return DozerConverter.parseObject(repository.save(current), ClienteDTO.class);
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(e.getMessage());
         } catch (DataIntegrityViolationException e) {

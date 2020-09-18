@@ -1,22 +1,17 @@
-package com.lucasxavier.crmapi.domain.data.models;
+package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.persistence.*;
+import com.lucasxavier.crmapi.domain.data.models.Carro;
+import com.lucasxavier.crmapi.domain.data.models.Pais;
+import com.lucasxavier.crmapi.domain.data.models.Profissao;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
-@Table(name = "cliente")
-public class Cliente {
+public class ClienteDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cliente")
     private Long id;
-
     private String primeiro_nome;
     private String ultimo_nome;
     private String email;
@@ -24,25 +19,20 @@ public class Cliente {
     private String cidade;
     private String empresa;
     private String etnia;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Calendar nascimento;
 
-    @ManyToOne
-    @JoinColumn(name = "codigo_pais")
     private Pais pais;
-
-    @ManyToOne
-    @JoinColumn(name = "id_profissao")
     private Profissao profissao;
-
-    @ManyToMany(mappedBy = "clientes")
     private final Set<Carro> carros = new HashSet<>();
 
-    public Cliente() {
+    public ClienteDTO() {
     }
 
-    public Cliente(Long id, String primeiro_nome, String ultimo_nome, String email, String sexo,
-                   String cidade, String empresa, String etnia, Calendar nascimento, Pais pais,
-                   Profissao profissao) {
+    public ClienteDTO(Long id, String primeiro_nome, String ultimo_nome, String email, String sexo,
+                      String cidade, String empresa, String etnia, Calendar nascimento, Pais pais,
+                      Profissao profissao) {
         this.id = id;
         this.primeiro_nome = primeiro_nome;
         this.ultimo_nome = ultimo_nome;
@@ -152,12 +142,23 @@ public class Cliente {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Cliente cliente = (Cliente) o;
-        return Objects.equals(id, cliente.id);
+        ClienteDTO that = (ClienteDTO) o;
+        return id.equals(that.id) &&
+                primeiro_nome.equals(that.primeiro_nome) &&
+                Objects.equals(ultimo_nome, that.ultimo_nome) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(sexo, that.sexo) &&
+                Objects.equals(cidade, that.cidade) &&
+                Objects.equals(empresa, that.empresa) &&
+                Objects.equals(etnia, that.etnia) &&
+                Objects.equals(nascimento, that.nascimento) &&
+                Objects.equals(pais, that.pais) &&
+                Objects.equals(profissao, that.profissao) &&
+                Objects.equals(carros, that.carros);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, primeiro_nome, ultimo_nome, email, sexo, cidade, empresa, etnia, nascimento, pais, profissao, carros);
     }
 }
