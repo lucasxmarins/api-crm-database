@@ -44,6 +44,7 @@ public class Montadora {
         this.nome = nome_montadora;
     }
 
+    @JsonIgnore
     public List<Carro> getCarros() {
         return carros;
     }

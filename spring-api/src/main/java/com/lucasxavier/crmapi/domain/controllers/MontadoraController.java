@@ -1,7 +1,8 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
 import com.lucasxavier.crmapi.domain.data.dto.MontadoraDTO;
-import com.lucasxavier.crmapi.domain.data.models.Montadora;
+import com.lucasxavier.crmapi.domain.services.CarroService;
 import com.lucasxavier.crmapi.domain.services.MontadoraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ import java.util.List;
 public class MontadoraController {
 
     private final MontadoraService service;
+    private final CarroService carroService;
 
     @Autowired
-    public MontadoraController(MontadoraService service) {
+    public MontadoraController(MontadoraService service, CarroService carroService) {
         this.service = service;
+        this.carroService = carroService;
     }
 
     @GetMapping
@@ -49,4 +52,13 @@ public class MontadoraController {
     public ResponseEntity<MontadoraDTO> update(@PathVariable Long id, @RequestBody MontadoraDTO montadora) {
         return ResponseEntity.ok().body(service.update(id, montadora));
     }
+
+    // Associated Getter
+    @GetMapping(value = "/{id}/carros")
+    public ResponseEntity<List<CarroDTO>> getCarsPerConstructor(@PathVariable long id){
+        return ResponseEntity.ok().body(carroService.findCarsPerConstructor(id));
+    }
+
+
+
 }

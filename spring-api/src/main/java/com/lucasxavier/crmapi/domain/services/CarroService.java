@@ -69,4 +69,11 @@ public class CarroService {
         current.setNome(update.getNome());
         current.setMontadora(update.getMontadora());
     }
+
+    // Associated methods
+    public List<CarroDTO> findCarsPerConstructor(long id){
+        List<Carro> carros = repository.getCarsPerConstructor(id)
+                .orElseThrow(()-> new ResourceNotFoundException(id));
+        return DozerConverter.parseListObjects(carros, CarroDTO.class);
+    }
 }

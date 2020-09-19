@@ -61,6 +61,7 @@ public class Carro {
         this.montadora = montadora;
     }
 
+    @JsonIgnore
     public Set<Cliente> getClientes() {
         return clientes;
     }

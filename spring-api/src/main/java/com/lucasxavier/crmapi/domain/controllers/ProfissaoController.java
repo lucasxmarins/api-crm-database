@@ -1,6 +1,5 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
-import com.lucasxavier.crmapi.domain.converters.DozerConverter;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
 import com.lucasxavier.crmapi.domain.services.ClienteService;

@@ -25,7 +25,7 @@ public class ClienteDTO {
 
     private Pais pais;
     private Profissao profissao;
-    private final Set<Carro> carros = new HashSet<>();
+    private Set<Carro> carros = new HashSet<>();
 
     public ClienteDTO() {
     }
@@ -136,6 +136,10 @@ public class ClienteDTO {
 
     public Set<Carro> getCarros() {
         return carros;
+    }
+
+    public void setCarros(Set<Carro> carros) {
+        this.carros = carros;
     }
 
     @Override

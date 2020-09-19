@@ -1,7 +1,5 @@
 package com.lucasxavier.crmapi.domain.data.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.HashSet;

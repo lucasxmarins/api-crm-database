@@ -1,7 +1,6 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
-import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
