@@ -5,6 +5,7 @@ import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
+import com.lucasxavier.crmapi.domain.repositories.CarroClienteRepository;
 import com.lucasxavier.crmapi.domain.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,10 +18,12 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository repository;
+    private final CarroClienteRepository carroClienteRepository;
 
     @Autowired
-    public ClienteService(ClienteRepository repository) {
+    public ClienteService(ClienteRepository repository, CarroClienteRepository carroClienteRepository) {
         this.repository = repository;
+        this.carroClienteRepository = carroClienteRepository;
     }
 
     public List<ClienteDTO> findAll() {
@@ -84,4 +87,5 @@ public class ClienteService {
     public List<ClienteDTO> findClientsPerJob(Long id){
         return DozerConverter.parseListObjects(repository.findClientsPerJob(id), ClienteDTO.class);
     }
+
 }

@@ -1,6 +1,5 @@
 package com.lucasxavier.crmapi.domain.data.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import java.util.List;

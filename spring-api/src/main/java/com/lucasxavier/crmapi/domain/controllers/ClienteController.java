@@ -1,8 +1,9 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
-import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
+import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
-import com.lucasxavier.crmapi.domain.services.CarroService;
+import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
+import com.lucasxavier.crmapi.domain.services.CarroClienteService;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,12 @@ import java.util.List;
 public class ClienteController{
 
     private final ClienteService service;
-    private final CarroService carroService;
+    private final CarroClienteService carroClienteService;
 
     @Autowired
-    public ClienteController(ClienteService service, CarroService carroService) {
+    public ClienteController(ClienteService service, CarroClienteService carroClienteService) {
         this.service = service;
-        this.carroService = carroService;
+        this.carroClienteService = carroClienteService;
     }
 
     @GetMapping
@@ -53,9 +54,16 @@ public class ClienteController{
         return ResponseEntity.ok().body(service.update(id, cliente));
     }
 
-    // Associated getter
+    // Associated VERBS
     @GetMapping(value = "/{id}/carros")
-    public  ResponseEntity<List<CarroDTO>> findCarsPerClient(@PathVariable Long id){
-        return ResponseEntity.ok().body(carroService.findCarsPerClient(id));
+    public  ResponseEntity<List<CarroClienteDTO>> findCarsPerClient(@PathVariable Long id){
+        return ResponseEntity.ok().body(carroClienteService.findCarsByClient(id));
     }
+
+    @PostMapping(value = "/{id}/carros")
+    public ResponseEntity<CarroClienteDTO> addCarToClient(@PathVariable Long id , @RequestBody CarroCliente carro){
+        return ResponseEntity.ok().body(carroClienteService.addCarToClient(id, carro));
+    }
+
+
 }

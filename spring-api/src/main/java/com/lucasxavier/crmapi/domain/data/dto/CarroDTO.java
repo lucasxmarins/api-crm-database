@@ -1,9 +1,8 @@
 package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lucasxavier.crmapi.domain.data.models.Cliente;
+import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
 import com.lucasxavier.crmapi.domain.data.models.Montadora;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,8 +14,8 @@ public class CarroDTO implements Serializable {
     private Long id;
     private String nome;
     private Montadora montadora;
-
-    private final Set<Cliente> clientes = new HashSet<>();
+    @JsonIgnore
+    private final Set<CarroCliente> carroClienteSet = new HashSet<>();
 
     public CarroDTO() {
     }
@@ -52,24 +51,23 @@ public class CarroDTO implements Serializable {
     }
 
     @JsonIgnore
-    public Set<Cliente> getClientes() {
-        return clientes;
+    public Set<CarroCliente> getCarroClienteSet() {
+        return carroClienteSet;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        CarroDTO carroVO = (CarroDTO) o;
-        return id.equals(carroVO.id) &&
-                nome.equals(carroVO.nome) &&
-                Objects.equals(montadora, carroVO.montadora) &&
-                Objects.equals(clientes, carroVO.clientes);
+        CarroDTO carroDTO = (CarroDTO) o;
+        return id.equals(carroDTO.id) &&
+                nome.equals(carroDTO.nome) &&
+                Objects.equals(montadora, carroDTO.montadora) &&
+                Objects.equals(carroClienteSet, carroDTO.carroClienteSet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, nome, montadora, clientes);
+        return Objects.hash(id, nome, montadora, carroClienteSet);
     }
 }

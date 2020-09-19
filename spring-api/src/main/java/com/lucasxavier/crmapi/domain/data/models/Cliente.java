@@ -32,8 +32,8 @@ public class Cliente {
     @JoinColumn(name = "id_profissao")
     private Profissao profissao;
 
-    @ManyToMany(mappedBy = "clientes")
-    private final Set<Carro> carros = new HashSet<>();
+    @OneToMany(mappedBy = "id.cliente")
+    private final Set<CarroCliente> carros = new HashSet<>();
 
     public Cliente() {
     }
@@ -142,7 +142,7 @@ public class Cliente {
         this.profissao = profissao;
     }
 
-    public Set<Carro> getCarros() {
+    public Set<CarroCliente> getCarros() {
         return carros;
     }
 

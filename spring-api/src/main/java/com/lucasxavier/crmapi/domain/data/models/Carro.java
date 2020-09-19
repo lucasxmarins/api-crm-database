@@ -1,7 +1,6 @@
 package com.lucasxavier.crmapi.domain.data.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -22,11 +21,9 @@ public class Carro {
     @JoinColumn(name = "id_montadora")
     private Montadora montadora;
 
-    @ManyToMany
-    @JoinTable(name = "carro_cliente",
-            joinColumns = @JoinColumn(name = "id_carro"),
-            inverseJoinColumns = @JoinColumn(name = "id_cliente"))
-    private final Set<Cliente> clientes = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.carro")
+    private Set<CarroCliente> carroClienteSet = new HashSet<>();
 
     public Carro() {
     }
@@ -62,8 +59,12 @@ public class Carro {
     }
 
     @JsonIgnore
-    public Set<Cliente> getClientes() {
-        return clientes;
+    public Set<CarroCliente> getCarroClienteSet() {
+        return carroClienteSet;
+    }
+
+    public void setCarroClienteSet(Set<CarroCliente> carroClienteSet) {
+        this.carroClienteSet = carroClienteSet;
     }
 
     @Override

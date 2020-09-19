@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lucasxavier.crmapi.domain.data.models.Carro;
+import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
 import com.lucasxavier.crmapi.domain.data.models.Pais;
 import com.lucasxavier.crmapi.domain.data.models.Profissao;
 import java.util.Calendar;
@@ -25,7 +25,7 @@ public class ClienteDTO {
 
     private Pais pais;
     private Profissao profissao;
-    private Set<Carro> carros = new HashSet<>();
+    private Set<CarroCliente> carros = new HashSet<>();
 
     public ClienteDTO() {
     }
@@ -134,11 +134,11 @@ public class ClienteDTO {
         this.profissao = profissao;
     }
 
-    public Set<Carro> getCarros() {
+    public Set<CarroCliente> getCarros() {
         return carros;
     }
 
-    public void setCarros(Set<Carro> carros) {
+    public void setCarros(Set<CarroCliente> carros) {
         this.carros = carros;
     }
 
