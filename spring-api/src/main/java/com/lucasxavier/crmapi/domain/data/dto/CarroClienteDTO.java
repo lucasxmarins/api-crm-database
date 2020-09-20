@@ -27,7 +27,6 @@ public class CarroClienteDTO {
         id.setCarro(carro);
     }
 
-    @JsonIgnore
     public Cliente getCliente(){
         return id.getCliente();
     }

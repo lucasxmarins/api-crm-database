@@ -56,7 +56,7 @@ public class MontadoraController {
     // Associated Getter
     @GetMapping(value = "/{id}/carros")
     public ResponseEntity<List<CarroDTO>> getCarsPerConstructor(@PathVariable long id){
-        return ResponseEntity.ok().body(carroService.findCarsPerConstructor(id));
+        return ResponseEntity.ok().body(carroService.findCarsByManufacturer(id));
     }
 
 

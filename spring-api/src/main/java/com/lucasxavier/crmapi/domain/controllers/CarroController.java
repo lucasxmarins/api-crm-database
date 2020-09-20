@@ -1,6 +1,8 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
+import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
+import com.lucasxavier.crmapi.domain.services.CarroClienteService;
 import com.lucasxavier.crmapi.domain.services.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,12 @@ import java.util.List;
 public class CarroController{
 
     private final CarroService service;
+    private final CarroClienteService carroClienteService;
 
     @Autowired
-    public CarroController(CarroService service) {
+    public CarroController(CarroService service, CarroClienteService carroClienteService) {
         this.service = service;
+        this.carroClienteService = carroClienteService;
     }
 
     @GetMapping
@@ -52,5 +56,10 @@ public class CarroController{
         return ResponseEntity.noContent().build();
     }
 
+    // Associated VERBS
+    @GetMapping(value = "/{id}/clientes")
+    public ResponseEntity<List<CarroClienteDTO>> findAllClientCars(@PathVariable Long id){
+        return ResponseEntity.ok().body(carroClienteService.findAllClientCars(id));
+    }
 
 }

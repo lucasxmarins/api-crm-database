@@ -11,4 +11,10 @@ public interface CarroClienteRepository extends JpaRepository<CarroCliente, Long
 
     @Query(value = "SELECT * FROM carro_cliente WHERE id_cliente = ?1", nativeQuery = true)
     Optional<List<CarroCliente>> findCarByClient(Long id);
+
+    @Query(value = "SELECT cc.* from cliente c " +
+                    "JOIN carro_cliente cc " +
+                    "ON c.id_cliente = cc.id_cliente " +
+                    "WHERE cc.id_carro = ?1", nativeQuery = true)
+    Optional<List<CarroCliente>> findAllClientCars(Long carId);
 }

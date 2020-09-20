@@ -71,14 +71,8 @@ public class CarroService {
     }
 
     // Associated methods
-    public List<CarroDTO> findCarsPerConstructor(Long id){
-        List<Carro> carros = repository.findCarsPerConstructor(id)
-                .orElseThrow(()-> new ResourceNotFoundException(id));
-        return DozerConverter.parseListObjects(carros, CarroDTO.class);
-    }
-
-    public List<CarroDTO> findCarsPerClient(Long id){
-        List<Carro> carros = repository.findCarsPerClient(id)
+    public List<CarroDTO> findCarsByManufacturer(Long id){
+        List<Carro> carros = repository.findCarsByManufacturer(id)
                 .orElseThrow(()-> new ResourceNotFoundException(id));
         return DozerConverter.parseListObjects(carros, CarroDTO.class);
     }

@@ -39,4 +39,12 @@ public class CarroClienteService {
         List<CarroCliente> carros = repository.findCarByClient(id).orElseThrow(()-> new ResourceNotFoundException(id));
         return DozerConverter.parseListObjects(carros, CarroClienteDTO.class);
     }
+
+    public List<CarroClienteDTO> findAllClientCars(Long id) {
+        List<CarroCliente> carros = repository.findAllClientCars(id).orElseThrow(()-> new ResourceNotFoundException(id));
+        return DozerConverter.parseListObjects(carros, CarroClienteDTO.class);
+    }
 }
+
+
+
