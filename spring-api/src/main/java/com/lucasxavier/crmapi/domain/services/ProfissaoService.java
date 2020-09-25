@@ -1,7 +1,6 @@
 package com.lucasxavier.crmapi.domain.services;
 
-import com.lucasxavier.crmapi.domain.converters.DozerConverter;
-import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
+import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
 import com.lucasxavier.crmapi.domain.data.models.Profissao;
 import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
@@ -26,19 +25,19 @@ public class ProfissaoService {
     }
 
     public List<ProfissaoDTO> findAll() {
-        return DozerConverter.parseListObjects(repository.findAll(), ProfissaoDTO.class);
+        return DefaultConverter.parseListObjects(repository.findAll(), ProfissaoDTO.class);
     }
 
     public ProfissaoDTO findById(Long id) {
         var profissao = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        return DozerConverter.parseObject(profissao, ProfissaoDTO.class);
+        return DefaultConverter.parseObject(profissao, ProfissaoDTO.class);
     }
 
     public ProfissaoDTO insert(ProfissaoDTO profissaoVO) {
         try {
 
-            var profissao = DozerConverter.parseObject(profissaoVO, Profissao.class);
-            return DozerConverter.parseObject(repository.save(profissao), ProfissaoDTO.class);
+            var profissao = DefaultConverter.parseObject(profissaoVO, Profissao.class);
+            return DefaultConverter.parseObject(repository.save(profissao), ProfissaoDTO.class);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
@@ -58,8 +57,8 @@ public class ProfissaoService {
     public ProfissaoDTO update(Long id, ProfissaoDTO updated) {
         try {
             Profissao current = repository.getOne(id);
-            updateData(current, DozerConverter.parseObject(updated, Profissao.class));
-            return DozerConverter.parseObject(repository.save(current), ProfissaoDTO.class);
+            updateData(current, DefaultConverter.parseObject(updated, Profissao.class));
+            return DefaultConverter.parseObject(repository.save(current), ProfissaoDTO.class);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         } catch (DataIntegrityViolationException e) {

@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.converters;
+package com.lucasxavier.crmapi.domain.data.converters;
 
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -6,7 +6,7 @@ import com.github.dozermapper.core.Mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DozerConverter {
+public class DefaultConverter {
 
     private final static Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 

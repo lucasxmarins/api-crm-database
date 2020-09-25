@@ -1,7 +1,9 @@
 package com.lucasxavier.crmapi.domain.services;
 
-import com.lucasxavier.crmapi.domain.converters.DozerConverter;
+import com.lucasxavier.crmapi.domain.data.converters.ClienteConverter;
+import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTOv2;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
@@ -17,25 +19,28 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository repository;
+    private final ClienteConverter converter;
 
     @Autowired
-    public ClienteService(ClienteRepository repository){
+    public ClienteService(ClienteRepository repository, ClienteConverter converter){
         this.repository = repository;
+        this.converter = converter;
     }
 
-    public List<ClienteDTO> findAll() {
-        return DozerConverter.parseListObjects(repository.findAll(), ClienteDTO.class);
+    public List<ClienteDTOv2> findAll() {
+        return converter.convertListClientesToDTO(repository.findAll());
     }
 
-    public ClienteDTO findById(Long id) {
+    public ClienteDTOv2 findById(Long id) {
         var cliente = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        return DozerConverter.parseObject(cliente, ClienteDTO.class);
+        return converter.convertEntityToDTO(cliente);
     }
 
-    public ClienteDTO insert(ClienteDTO clienteDTO) {
+    public ClienteDTOv2 insert(ClienteDTOv2 clienteDTO) {
         try {
-            var cliente = DozerConverter.parseObject(clienteDTO, Cliente.class);
-            return DozerConverter.parseObject(repository.save(cliente), ClienteDTO.class);
+            var cliente = DefaultConverter.parseObject(clienteDTO, Cliente.class);
+            return converter.convertEntityToDTO(repository.save(cliente));
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -51,11 +56,12 @@ public class ClienteService {
         }
     }
 
-    public ClienteDTO update(Long id, ClienteDTO updated) {
+    public ClienteDTOv2 update(Long id, ClienteDTOv2 updated) {
         try {
             Cliente current = repository.getOne(id);
-            updateData(current, DozerConverter.parseObject(updated, Cliente.class));
-            return DozerConverter.parseObject(repository.save(current), ClienteDTO.class);
+            updateData(current, converter.convertDTOToEntity(updated));
+            return converter.convertEntityToDTO(repository.save(current));
+
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(e.getMessage());
         } catch (DataIntegrityViolationException e) {
@@ -78,11 +84,11 @@ public class ClienteService {
 
     // Associated Methods
     public List<ClienteDTO> findClientsPerCountry(String cod){
-        return DozerConverter.parseListObjects(repository.findClientsPerCountry(cod), ClienteDTO.class);
+        return DefaultConverter.parseListObjects(repository.findClientsPerCountry(cod), ClienteDTO.class);
     }
 
     public List<ClienteDTO> findClientsPerJob(Long id){
-        return DozerConverter.parseListObjects(repository.findClientsPerJob(id), ClienteDTO.class);
+        return DefaultConverter.parseListObjects(repository.findClientsPerJob(id), ClienteDTO.class);
     }
 
 }

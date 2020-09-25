@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
-import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
+import com.lucasxavier.crmapi.domain.data.dto.CarroDTOv2;
 import com.lucasxavier.crmapi.domain.data.dto.MontadoraDTO;
 import com.lucasxavier.crmapi.domain.services.CarroService;
 import com.lucasxavier.crmapi.domain.services.MontadoraService;
@@ -55,8 +55,8 @@ public class MontadoraController {
 
     // Associated Getter
     @GetMapping(value = "/{id}/carros")
-    public ResponseEntity<List<CarroDTO>> getCarsPerConstructor(@PathVariable long id){
-        return ResponseEntity.ok().body(carroService.findCarsByManufacturer(id));
+    public ResponseEntity<List<CarroDTOv2>> findCarrosByMontadoraId(@PathVariable long id){
+        return ResponseEntity.ok().body(carroService.findCarrosByMontadoraId(id));
     }
 
 

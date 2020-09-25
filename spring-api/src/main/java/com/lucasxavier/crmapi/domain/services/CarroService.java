@@ -1,8 +1,8 @@
 package com.lucasxavier.crmapi.domain.services;
 
-import com.lucasxavier.crmapi.domain.converters.DozerConverter;
+import com.lucasxavier.crmapi.domain.data.converters.CarroConverter;
+import com.lucasxavier.crmapi.domain.data.dto.CarroDTOv2;
 import com.lucasxavier.crmapi.domain.data.models.Carro;
-import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroRepository;
@@ -17,47 +17,18 @@ import java.util.List;
 public class CarroService {
 
     private final CarroRepository repository;
+    private final CarroConverter converter;
 
     @Autowired
-    public CarroService(CarroRepository repository) {
+    public CarroService(CarroRepository repository, CarroConverter converter) {
         this.repository = repository;
+        this.converter = converter;
     }
 
-    public List<CarroDTO> findAll() {
-        return DozerConverter.parseListObjects(repository.findAll(), CarroDTO.class);
-    }
-
-    public CarroDTO findById(Long id) {
-        var carro = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-        return DozerConverter.parseObject(carro, CarroDTO.class);
-    }
-
-    public CarroDTO insert(CarroDTO carroVO) {
-        try {
-            var carro = DozerConverter.parseObject(carroVO, Carro.class);
-            return DozerConverter.parseObject(repository.save(carro), CarroDTO.class);
-
-        } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(e.getMessage());
-        }
-    }
-
+    // N apagar
     public void delete(Long id) {
         try {
             repository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(e.getMessage());
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(e.getMessage());
-        }
-    }
-
-    public CarroDTO update(Long id, CarroDTO updated) {
-        try {
-            Carro current = repository.getOne(id);
-            updateData(current, DozerConverter.parseObject(updated, Carro.class));
-
-            return DozerConverter.parseObject(repository.save(current), CarroDTO.class);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         } catch (EmptyResultDataAccessException e) {
@@ -70,10 +41,45 @@ public class CarroService {
         current.setMontadora(update.getMontadora());
     }
 
-    // Associated methods
-    public List<CarroDTO> findCarsByManufacturer(Long id){
+    // V2
+
+    public CarroDTOv2 findByIdV2(Long id) {
+        var carro = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        return converter.convertEntityToDTO(carro);
+    }
+
+    public List<CarroDTOv2> findAllV2() {
+        return converter.convertListEntityToDTO(repository.findAll());
+    }
+
+    public CarroDTOv2 insertV2(CarroDTOv2 carroDTO) {
+        try {
+            var carro = converter.convertDTOToEntity(carroDTO);
+            return converter.convertEntityToDTO(repository.save(carro));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public CarroDTOv2 updateV2(Long id, CarroDTOv2 updated) {
+        try {
+            Carro current = repository.getOne(id);
+            updateData(current, converter.convertDTOToEntity(updated));
+
+            return converter.convertEntityToDTO(repository.save(current));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+    }
+
+    // Associated method - MontadoraController
+    public List<CarroDTOv2> findCarrosByMontadoraId(Long id){
         List<Carro> carros = repository.findCarsByManufacturer(id)
                 .orElseThrow(()-> new ResourceNotFoundException(id));
-        return DozerConverter.parseListObjects(carros, CarroDTO.class);
+        return converter.convertListEntityToDTO(carros);
     }
 }

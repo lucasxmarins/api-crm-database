@@ -1,14 +1,14 @@
 package com.lucasxavier.crmapi.domain.services;
 
-import com.lucasxavier.crmapi.domain.converters.DozerConverter;
-import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
+import com.lucasxavier.crmapi.domain.data.converters.CarroClienteConverter;
+import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTOv2;
 import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroClienteRepository;
-import com.lucasxavier.crmapi.domain.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +17,66 @@ import java.util.List;
 public class CarroClienteService {
 
     private final CarroClienteRepository repository;
-    private final ClienteRepository clienteRepository;
+    private final CarroClienteConverter converter;
 
     @Autowired
-    public CarroClienteService(CarroClienteRepository repository, ClienteRepository clienteRepository){
+    public CarroClienteService(CarroClienteRepository repository, CarroClienteConverter converter){
         this.repository = repository;
-        this.clienteRepository = clienteRepository;
+        this.converter = converter;
     }
 
-    public CarroClienteDTO addCarToClient(Long id, CarroCliente carro) {
-        carro.setCliente(clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id)));
+    // ClienteController
+    public CarroClienteDTOv2 addCarroToCliente(Long id, CarroClienteDTOv2 carroDTO) {
         try {
-            return DozerConverter.parseObject(repository.save(carro), CarroClienteDTO.class);
+            carroDTO.setClienteId(id);
+            var carro = converter.convertDTOToEntity(carroDTO);
+            return converter.convertEntityToDTO(repository.save(carro));
         }
         catch (DataIntegrityViolationException e){
             throw new DatabaseException(e.getMessage());
         }
     }
 
-    public List<CarroClienteDTO> findCarsByClient(Long id){
+    // ClienteController
+    public List<CarroClienteDTOv2> findAllCarrosFromClient(Long id){
         List<CarroCliente> carros = repository.findCarByClient(id).orElseThrow(()-> new ResourceNotFoundException(id));
-        return DozerConverter.parseListObjects(carros, CarroClienteDTO.class);
+        return converter.convertListEntityToDTO(carros);
     }
 
-    public List<CarroClienteDTO> findAllClientCars(Long id) {
+    // ClienteController
+    public CarroClienteDTOv2 findCarroFromClienteById(Long clientId, Long carroId){
+        List<CarroCliente> carros = repository.finsClientCarById(clientId, carroId)
+                .orElseThrow(()-> new ResourceNotFoundException(carroId));
+        return converter.convertEntityToDTO(carros.get(0));
+    }
+
+    // ClienteController
+    public void deleteCarroFromCliente(Long clientId, Long carroId){
+        try{
+            var carro = findCarroFromClienteById(clientId, carroId);
+            repository.delete(converter.convertDTOToEntity(carro));
+        }
+        catch (DataIntegrityViolationException e){
+            throw new DatabaseException(e.getMessage());
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException(carroId);
+        }
+    }
+
+    // ClienteController
+    public CarroClienteDTOv2 updateCarroFromCliente(Long clientId, Long carroId, CarroClienteDTOv2 updated){
+        var carroDTO = findCarroFromClienteById(clientId, carroId);
+        carroDTO.setAno(updated.getAno());
+        var carro = converter.convertDTOToEntity(carroDTO);
+
+        return converter.convertEntityToDTO(repository.save(carro));
+    }
+
+    // CarroController
+    public List<CarroClienteDTOv2> findAllCarrosFromClientesByCarroId(Long id) {
         List<CarroCliente> carros = repository.findAllClientCars(id).orElseThrow(()-> new ResourceNotFoundException(id));
-        return DozerConverter.parseListObjects(carros, CarroClienteDTO.class);
+        return converter.convertListEntityToDTO(carros);
     }
 }
 
