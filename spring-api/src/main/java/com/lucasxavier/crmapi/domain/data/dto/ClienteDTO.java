@@ -1,15 +1,18 @@
 package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
-import com.lucasxavier.crmapi.domain.data.models.Pais;
-import com.lucasxavier.crmapi.domain.data.models.Profissao;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.hateoas.RepresentationModel;
+import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
-public class ClienteDTO {
+@JsonPropertyOrder({"id", "primeiro_nome", "ultimo_nome", "email", "sexo", "cidade", "empresa",
+"etnia", "nascimento", "paisCod", "profissaoNome"})
+public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Serializable {
+
+    private static final long serialVersionUID = -2296085128232478057L;
 
     private Long id;
     private String primeiro_nome;
@@ -19,20 +22,17 @@ public class ClienteDTO {
     private String cidade;
     private String empresa;
     private String etnia;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Calendar nascimento;
+    @JsonProperty(value = "codigo_pais")
+    private String paisCod;
+    @JsonProperty(value = "profissao")
+    private String profissaoNome;
 
-    private Pais pais;
-    private Profissao profissao;
-    private Set<CarroCliente> carros = new HashSet<>();
+    public ClienteDTO(){}
 
-    public ClienteDTO() {
-    }
-
-    public ClienteDTO(Long id, String primeiro_nome, String ultimo_nome, String email, String sexo,
-                      String cidade, String empresa, String etnia, Calendar nascimento, Pais pais,
-                      Profissao profissao) {
+    public ClienteDTO(Long id, String primeiro_nome, String ultimo_nome, String email, String sexo, String cidade,
+                      String empresa, String etnia, Calendar nascimento, String paisCod, String profissaoNome) {
         this.id = id;
         this.primeiro_nome = primeiro_nome;
         this.ultimo_nome = ultimo_nome;
@@ -42,8 +42,8 @@ public class ClienteDTO {
         this.empresa = empresa;
         this.etnia = etnia;
         this.nascimento = nascimento;
-        this.pais = pais;
-        this.profissao = profissao;
+        this.paisCod = paisCod;
+        this.profissaoNome = profissaoNome;
     }
 
     public Long getId() {
@@ -118,28 +118,20 @@ public class ClienteDTO {
         this.nascimento = nascimento;
     }
 
-    public Pais getPais() {
-        return pais;
+    public String getPaisCod() {
+        return paisCod;
     }
 
-    public void setPais(Pais pais) {
-        this.pais = pais;
+    public void setPaisCod(String paisCod) {
+        this.paisCod = paisCod;
     }
 
-    public Profissao getProfissao() {
-        return profissao;
+    public String getProfissaoNome() {
+        return profissaoNome;
     }
 
-    public void setProfissao(Profissao profissao) {
-        this.profissao = profissao;
-    }
-
-    public Set<CarroCliente> getCarros() {
-        return carros;
-    }
-
-    public void setCarros(Set<CarroCliente> carros) {
-        this.carros = carros;
+    public void setProfissaoNome(String profissaoNome) {
+        this.profissaoNome = profissaoNome;
     }
 
     @Override
@@ -147,8 +139,8 @@ public class ClienteDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClienteDTO that = (ClienteDTO) o;
-        return id.equals(that.id) &&
-                primeiro_nome.equals(that.primeiro_nome) &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(primeiro_nome, that.primeiro_nome) &&
                 Objects.equals(ultimo_nome, that.ultimo_nome) &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(sexo, that.sexo) &&
@@ -156,13 +148,12 @@ public class ClienteDTO {
                 Objects.equals(empresa, that.empresa) &&
                 Objects.equals(etnia, that.etnia) &&
                 Objects.equals(nascimento, that.nascimento) &&
-                Objects.equals(pais, that.pais) &&
-                Objects.equals(profissao, that.profissao) &&
-                Objects.equals(carros, that.carros);
+                Objects.equals(paisCod, that.paisCod) &&
+                Objects.equals(profissaoNome, that.profissaoNome);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, primeiro_nome, ultimo_nome, email, sexo, cidade, empresa, etnia, nascimento, pais, profissao, carros);
+        return Objects.hash(id, primeiro_nome, ultimo_nome, email, sexo, cidade, empresa, etnia, nascimento, paisCod, profissaoNome);
     }
 }

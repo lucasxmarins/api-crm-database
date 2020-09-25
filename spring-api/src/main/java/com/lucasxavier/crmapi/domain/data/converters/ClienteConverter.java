@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.data.converters;
 
-import com.lucasxavier.crmapi.domain.data.dto.ClienteDTOv2;
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.PaisRepository;
@@ -24,8 +24,8 @@ public class ClienteConverter {
     }
 
 
-    public ClienteDTOv2 convertEntityToDTO(Cliente cliente){
-        var clienteDTO = new ClienteDTOv2();
+    public ClienteDTO convertEntityToDTO(Cliente cliente){
+        var clienteDTO = new ClienteDTO();
 
         clienteDTO.setId(cliente.getId());
         clienteDTO.setPrimeiro_nome(cliente.getPrimeiro_nome());
@@ -42,7 +42,7 @@ public class ClienteConverter {
         return clienteDTO;
     }
 
-    public Cliente convertDTOToEntity(ClienteDTOv2 clienteDTO){
+    public Cliente convertDTOToEntity(ClienteDTO clienteDTO){
         var cliente = new Cliente();
 
         cliente.setId(clienteDTO.getId());
@@ -62,7 +62,8 @@ public class ClienteConverter {
         return cliente;
     }
 
-    public List<ClienteDTOv2> convertListClientesToDTO(List<Cliente> clientes){
+    public List<ClienteDTO> convertListClientesToDTO(List<Cliente> clientes){
         return clientes.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
+
 }

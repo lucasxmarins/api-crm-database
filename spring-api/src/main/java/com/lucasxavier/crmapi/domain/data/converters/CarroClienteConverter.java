@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.data.converters;
 
-import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTOv2;
+import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroRepository;
@@ -23,8 +23,8 @@ public class CarroClienteConverter {
         this.clienteRepository = clienteRepository;
     }
 
-    public CarroClienteDTOv2 convertEntityToDTO(CarroCliente carro){
-        var carroDTO = new CarroClienteDTOv2();
+    public CarroClienteDTO convertEntityToDTO(CarroCliente carro){
+        var carroDTO = new CarroClienteDTO();
 
         carroDTO.setAno(carro.getAno());
         carroDTO.setCarroId(carro.getCarro().getId());
@@ -33,7 +33,7 @@ public class CarroClienteConverter {
         return carroDTO;
     }
 
-    public CarroCliente convertDTOToEntity(CarroClienteDTOv2 carroDTO){
+    public CarroCliente convertDTOToEntity(CarroClienteDTO carroDTO){
         var carro = new CarroCliente();
 
         carro.setAno(carroDTO.getAno());
@@ -45,7 +45,7 @@ public class CarroClienteConverter {
         return carro;
     }
 
-    public List<CarroClienteDTOv2> convertListEntityToDTO(List<CarroCliente> carros){
+    public List<CarroClienteDTO> convertListEntityToDTO(List<CarroCliente> carros){
         return carros.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
 

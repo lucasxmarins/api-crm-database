@@ -12,5 +12,4 @@ public interface ProfissaoRepository extends JpaRepository<Profissao, Long> {
     @Query(value = "SELECT * FROM profissao WHERE nome_profissao = ?1 ", nativeQuery = true)
     Optional<List<Profissao>> findProfissaoByNome(String nome);
 
-
 }

@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.CarroConverter;
-import com.lucasxavier.crmapi.domain.data.dto.CarroDTOv2;
+import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
 import com.lucasxavier.crmapi.domain.data.models.Carro;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
@@ -43,16 +43,16 @@ public class CarroService {
 
     // V2
 
-    public CarroDTOv2 findByIdV2(Long id) {
+    public CarroDTO findByIdV2(Long id) {
         var carro = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         return converter.convertEntityToDTO(carro);
     }
 
-    public List<CarroDTOv2> findAllV2() {
+    public List<CarroDTO> findAllV2() {
         return converter.convertListEntityToDTO(repository.findAll());
     }
 
-    public CarroDTOv2 insertV2(CarroDTOv2 carroDTO) {
+    public CarroDTO insertV2(CarroDTO carroDTO) {
         try {
             var carro = converter.convertDTOToEntity(carroDTO);
             return converter.convertEntityToDTO(repository.save(carro));
@@ -62,7 +62,7 @@ public class CarroService {
         }
     }
 
-    public CarroDTOv2 updateV2(Long id, CarroDTOv2 updated) {
+    public CarroDTO updateV2(Long id, CarroDTO updated) {
         try {
             Carro current = repository.getOne(id);
             updateData(current, converter.convertDTOToEntity(updated));
@@ -77,7 +77,7 @@ public class CarroService {
     }
 
     // Associated method - MontadoraController
-    public List<CarroDTOv2> findCarrosByMontadoraId(Long id){
+    public List<CarroDTO> findAllCarrosByMontadoraId(Long id){
         List<Carro> carros = repository.findCarsByManufacturer(id)
                 .orElseThrow(()-> new ResourceNotFoundException(id));
         return converter.convertListEntityToDTO(carros);

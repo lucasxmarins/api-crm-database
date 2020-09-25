@@ -3,7 +3,6 @@ package com.lucasxavier.crmapi.domain.services;
 import com.lucasxavier.crmapi.domain.data.converters.ClienteConverter;
 import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
-import com.lucasxavier.crmapi.domain.data.dto.ClienteDTOv2;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
@@ -27,16 +26,16 @@ public class ClienteService {
         this.converter = converter;
     }
 
-    public List<ClienteDTOv2> findAll() {
+    public List<ClienteDTO> findAll() {
         return converter.convertListClientesToDTO(repository.findAll());
     }
 
-    public ClienteDTOv2 findById(Long id) {
+    public ClienteDTO findById(Long id) {
         var cliente = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         return converter.convertEntityToDTO(cliente);
     }
 
-    public ClienteDTOv2 insert(ClienteDTOv2 clienteDTO) {
+    public ClienteDTO insert(ClienteDTO clienteDTO) {
         try {
             var cliente = DefaultConverter.parseObject(clienteDTO, Cliente.class);
             return converter.convertEntityToDTO(repository.save(cliente));
@@ -56,7 +55,7 @@ public class ClienteService {
         }
     }
 
-    public ClienteDTOv2 update(Long id, ClienteDTOv2 updated) {
+    public ClienteDTO update(Long id, ClienteDTO updated) {
         try {
             Cliente current = repository.getOne(id);
             updateData(current, converter.convertDTOToEntity(updated));
@@ -82,13 +81,25 @@ public class ClienteService {
         current.setEmpresa(updated.getEmpresa());
     }
 
-    // Associated Methods
-    public List<ClienteDTO> findClientsPerCountry(String cod){
-        return DefaultConverter.parseListObjects(repository.findClientsPerCountry(cod), ClienteDTO.class);
+    // Associated Method - PaisController
+    public List<ClienteDTO> findAllClientesByPaisCod(String cod){
+        var clientesDTO = repository.findAllClientesByPaisCod(cod)
+                .orElseThrow(()-> new ResourceNotFoundException(cod));
+        return converter.convertListClientesToDTO(clientesDTO);
     }
 
-    public List<ClienteDTO> findClientsPerJob(Long id){
-        return DefaultConverter.parseListObjects(repository.findClientsPerJob(id), ClienteDTO.class);
+    // Associated Method - ProfissaoController
+    public List<ClienteDTO> findAllClientesByProfissaoId(Long id){
+        var clientesDTO = repository.findAllClientesByProfissaoId(id)
+                .orElseThrow(()-> new ResourceNotFoundException(id));
+        return converter.convertListClientesToDTO(clientesDTO);
+    }
+
+    // Associated Method - MontadoraController
+    public List<ClienteDTO> findAllClientesByMontadoraId(Long id){
+        var clientesDTO = repository.findAllClientesByMontadoraId(id)
+                .orElseThrow(()-> new ResourceNotFoundException(id));
+        return converter.convertListClientesToDTO(clientesDTO);
     }
 
 }

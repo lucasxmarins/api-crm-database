@@ -2,13 +2,16 @@ package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucasxavier.crmapi.domain.data.models.Cliente;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class ProfissaoDTO implements Serializable {
+public class ProfissaoDTO extends RepresentationModel<ProfissaoDTO> implements Serializable {
 
     private static final long serialVersionUID = 8098906860713019991L;
+
     private Long id;
     private String nome;
     private List<Cliente> cliente;

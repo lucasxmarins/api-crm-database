@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.CarroClienteConverter;
-import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTOv2;
+import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
 import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
@@ -26,7 +26,7 @@ public class CarroClienteService {
     }
 
     // ClienteController
-    public CarroClienteDTOv2 addCarroToCliente(Long id, CarroClienteDTOv2 carroDTO) {
+    public CarroClienteDTO addCarroToCliente(Long id, CarroClienteDTO carroDTO) {
         try {
             carroDTO.setClienteId(id);
             var carro = converter.convertDTOToEntity(carroDTO);
@@ -38,13 +38,13 @@ public class CarroClienteService {
     }
 
     // ClienteController
-    public List<CarroClienteDTOv2> findAllCarrosFromClient(Long id){
+    public List<CarroClienteDTO> findAllCarrosFromClient(Long id){
         List<CarroCliente> carros = repository.findCarByClient(id).orElseThrow(()-> new ResourceNotFoundException(id));
         return converter.convertListEntityToDTO(carros);
     }
 
     // ClienteController
-    public CarroClienteDTOv2 findCarroFromClienteById(Long clientId, Long carroId){
+    public CarroClienteDTO findCarroFromClienteById(Long clientId, Long carroId){
         List<CarroCliente> carros = repository.finsClientCarById(clientId, carroId)
                 .orElseThrow(()-> new ResourceNotFoundException(carroId));
         return converter.convertEntityToDTO(carros.get(0));
@@ -65,7 +65,7 @@ public class CarroClienteService {
     }
 
     // ClienteController
-    public CarroClienteDTOv2 updateCarroFromCliente(Long clientId, Long carroId, CarroClienteDTOv2 updated){
+    public CarroClienteDTO updateCarroFromCliente(Long clientId, Long carroId, CarroClienteDTO updated){
         var carroDTO = findCarroFromClienteById(clientId, carroId);
         carroDTO.setAno(updated.getAno());
         var carro = converter.convertDTOToEntity(carroDTO);
@@ -74,7 +74,7 @@ public class CarroClienteService {
     }
 
     // CarroController
-    public List<CarroClienteDTOv2> findAllCarrosFromClientesByCarroId(Long id) {
+    public List<CarroClienteDTO> findAllCarrosFromClientesByCarroId(Long id) {
         List<CarroCliente> carros = repository.findAllClientCars(id).orElseThrow(()-> new ResourceNotFoundException(id));
         return converter.convertListEntityToDTO(carros);
     }

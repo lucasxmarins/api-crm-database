@@ -2,10 +2,15 @@ package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucasxavier.crmapi.domain.data.models.Carro;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class MontadoraDTO {
+public class MontadoraDTO extends RepresentationModel<MontadoraDTO> implements Serializable {
+
+    private static final long serialVersionUID = -4609408840410453062L;
 
     private Long id;
     private String nome;

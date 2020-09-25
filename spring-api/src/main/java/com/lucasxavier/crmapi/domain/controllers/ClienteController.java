@@ -1,10 +1,12 @@
 package com.lucasxavier.crmapi.domain.controllers;
 
-import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTOv2;
-import com.lucasxavier.crmapi.domain.data.dto.ClienteDTOv2;
+import com.lucasxavier.crmapi.domain.controllers.linkGenerator.LinkGenerator;
+import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
+import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.services.CarroClienteService;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,89 +20,93 @@ public class ClienteController{
 
     private final ClienteService service;
     private final CarroClienteService carroClienteService;
+    private final LinkGenerator linkGenerator;
 
     @Autowired
-    public ClienteController(ClienteService service, CarroClienteService carroClienteService) {
+    public ClienteController(ClienteService service, CarroClienteService carroClienteService,
+                             LinkGenerator linkGenerator) {
         this.service = service;
         this.carroClienteService = carroClienteService;
+        this.linkGenerator = linkGenerator;
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTOv2>> findAll() {
-        var clientes = service.findAll();
-        /* clientes.forEach((cliente)->
-                cliente.add(WebMvcLinkBuilder.linkTo(
+    public ResponseEntity<List<ClienteDTO>> findAll() {
+        var clientesDTO = service.findAll();
+        clientesDTO.forEach((clienteDTO)->
+                clienteDTO.add(WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(ClienteController.class)
-                        .findById(cliente.getId())).withSelfRel())); */
-        return ResponseEntity.ok().body(clientes);
+                        .findById(clienteDTO.getId())).withSelfRel()));
+        return ResponseEntity.ok().body(clientesDTO);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTOv2> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(service.findById(id));
+    public ResponseEntity<ClienteDTO> findById(@PathVariable Long id) {
+        var clienteDTO = service.findById(id);
+        linkGenerator.createClienteLinks(clienteDTO);
+        return ResponseEntity.ok().body(clienteDTO);
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTOv2> insert(@RequestBody ClienteDTOv2 cliente) {
+    public ResponseEntity<ClienteDTO> insert(@RequestBody ClienteDTO cliente) {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(cliente.getId()).toUri();
-        return ResponseEntity.created(uri).body(service.insert(cliente));
+        var clienteDTO = service.insert(cliente);
+        linkGenerator.createClienteLinks(clienteDTO);
+        return ResponseEntity.created(uri).body(clienteDTO);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTOv2> delete(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTOv2> update(@PathVariable Long id, @RequestBody ClienteDTOv2 cliente) {
-        return ResponseEntity.ok().body(service.update(id, cliente));
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO cliente) {
+        var clienteDTO = service.update(id, cliente);
+        linkGenerator.createClienteLinks(clienteDTO);
+        return ResponseEntity.ok().body(clienteDTO);
     }
 
-    // CarroClient Methods
+    // CarroClient Methods ---------------------------------------------------------------------------
     @GetMapping(value = "/{id}/carros")
-    public  ResponseEntity<List<CarroClienteDTOv2>> findAllCarrosFromClient(@PathVariable Long id){
+    public  ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClient(@PathVariable Long id){
         var carros = carroClienteService.findAllCarrosFromClient(id);
-        /*carros.forEach((carro)->
+        carros.forEach((carro)->
                 carro.add(WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(ClienteController.class)
-                .findCarroFromClienteById(id, carro.getCarroId())).withSelfRel())); */
+                .findCarroFromClienteById(id, carro.getCarroId())).withSelfRel()));
 
         return ResponseEntity.ok().body(carros);
     }
 
     @GetMapping(value = "/{id}/carros/{carroId}")
-    public ResponseEntity<CarroClienteDTOv2> findCarroFromClienteById(@PathVariable Long id, @PathVariable Long carroId){
+    public ResponseEntity<CarroClienteDTO> findCarroFromClienteById(@PathVariable Long id, @PathVariable Long carroId){
         var carroDTO = carroClienteService.findCarroFromClienteById(id, carroId);
-        //LinkGenerator.createCarroClienteLinks(carroDTO);
+        linkGenerator.createCarroClienteLinks(carroDTO);
         return ResponseEntity.ok().body(carroDTO);
     }
 
     @PostMapping(value = "/{id}/carros")
-    public ResponseEntity<CarroClienteDTOv2> addCarroToCliente(@PathVariable Long id , @RequestBody CarroClienteDTOv2 carro){
+    public ResponseEntity<CarroClienteDTO> addCarroToCliente(@PathVariable Long id , @RequestBody CarroClienteDTO carro){
         var carroDTO = carroClienteService.addCarroToCliente(id, carro);
-        //LinkGenerator.createCarroClienteLinks(carro);
+        linkGenerator.createCarroClienteLinks(carro);
         return ResponseEntity.ok().body(carroDTO);
     }
 
     @PutMapping(value = "/{id}/carros/{carroId}")
-    public ResponseEntity<CarroClienteDTOv2> updateCarroFromCliente(@PathVariable Long id, @PathVariable Long carroId,
-                                                             @RequestBody CarroClienteDTOv2 carro){
+    public ResponseEntity<CarroClienteDTO> updateCarroFromCliente(@PathVariable Long id, @PathVariable Long carroId,
+                                                                  @RequestBody CarroClienteDTO carro){
         var carroDTO = carroClienteService.updateCarroFromCliente(id, carroId, carro);
-        //LinkGenerator.createCarroClienteLinks(carroDTO);
+        linkGenerator.createCarroClienteLinks(carroDTO);
         return ResponseEntity.ok().body(carroDTO);
     }
 
     @DeleteMapping(value = "/{id}/carros/{carroId}")
-    public ResponseEntity<CarroClienteDTOv2> deleteCarroFromClienteById(@PathVariable Long id, @PathVariable Long carroId){
+    public ResponseEntity<CarroClienteDTO> deleteCarroFromClienteById(@PathVariable Long id, @PathVariable Long carroId){
         carroClienteService.deleteCarroFromCliente(id, carroId);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
-
 
 }

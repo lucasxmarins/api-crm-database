@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.data.converters;
 
-import com.lucasxavier.crmapi.domain.data.dto.CarroDTOv2;
+import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
 import com.lucasxavier.crmapi.domain.data.models.Carro;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.MontadoraRepository;
@@ -18,8 +18,8 @@ public class CarroConverter {
         this.montadoraRepository = montadoraRepository;
     }
 
-    public CarroDTOv2 convertEntityToDTO(Carro carro){
-        CarroDTOv2 carroDTO = new CarroDTOv2();
+    public CarroDTO convertEntityToDTO(Carro carro){
+        CarroDTO carroDTO = new CarroDTO();
 
         carroDTO.setId(carro.getId());
         carroDTO.setNome(carro.getNome());
@@ -28,7 +28,7 @@ public class CarroConverter {
         return carroDTO;
     }
 
-    public Carro convertDTOToEntity(CarroDTOv2 carroDTO){
+    public Carro convertDTOToEntity(CarroDTO carroDTO){
         Carro carro = new Carro();
 
         carro.setId(carroDTO.getId());
@@ -39,7 +39,7 @@ public class CarroConverter {
         return carro;
     }
 
-    public List<CarroDTOv2> convertListEntityToDTO(List<Carro> carros){
+    public List<CarroDTO> convertListEntityToDTO(List<Carro> carros){
         return carros.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
 

@@ -4,15 +4,15 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
 
-public class CarroClienteDTOv2 extends RepresentationModel<CarroClienteDTOv2> {
+public class CarroClienteDTO extends RepresentationModel<CarroClienteDTO> {
 
     private Long clienteId;
     private Long carroId;
     private int ano;
 
-    public CarroClienteDTOv2(){}
+    public CarroClienteDTO(){}
 
-    public CarroClienteDTOv2(Long clienteId, Long carroId, int ano) {
+    public CarroClienteDTO(Long clienteId, Long carroId, int ano) {
         this.clienteId = clienteId;
         this.carroId = carroId;
         this.ano = ano;
@@ -46,7 +46,7 @@ public class CarroClienteDTOv2 extends RepresentationModel<CarroClienteDTOv2> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CarroClienteDTOv2 that = (CarroClienteDTOv2) o;
+        CarroClienteDTO that = (CarroClienteDTO) o;
         return ano == that.ano &&
                 Objects.equals(clienteId, that.clienteId) &&
                 Objects.equals(carroId, that.carroId);
