@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.data.models;
+package com.lucasxavier.crmapi.domain.data.entities;
 
 import javax.persistence.*;
 import java.util.Calendar;

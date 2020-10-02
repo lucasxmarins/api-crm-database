@@ -1,11 +1,10 @@
 package com.lucasxavier.crmapi.domain.data.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Objects;
 
 @JsonPropertyOrder({"id", "primeiro_nome", "ultimo_nome", "email", "sexo", "cidade", "empresa",
@@ -22,8 +21,7 @@ public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Seria
     private String cidade;
     private String empresa;
     private String etnia;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private Calendar nascimento;
+    private String nascimento;
     @JsonProperty(value = "codigo_pais")
     private String paisCod;
     @JsonProperty(value = "profissao")
@@ -32,7 +30,7 @@ public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Seria
     public ClienteDTO(){}
 
     public ClienteDTO(Long id, String primeiro_nome, String ultimo_nome, String email, String sexo, String cidade,
-                      String empresa, String etnia, Calendar nascimento, String paisCod, String profissaoNome) {
+                      String empresa, String etnia, String nascimento, String paisCod, String profissaoNome) {
         this.id = id;
         this.primeiro_nome = primeiro_nome;
         this.ultimo_nome = ultimo_nome;
@@ -110,11 +108,11 @@ public class ClienteDTO extends RepresentationModel<ClienteDTO> implements Seria
         this.etnia = etnia;
     }
 
-    public Calendar getNascimento() {
+    public String getNascimento() {
         return nascimento;
     }
 
-    public void setNascimento(Calendar nascimento) {
+    public void setNascimento(String nascimento) {
         this.nascimento = nascimento;
     }
 

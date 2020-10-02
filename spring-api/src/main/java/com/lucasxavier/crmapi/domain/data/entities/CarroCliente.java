@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.data.models;
+package com.lucasxavier.crmapi.domain.data.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.EmbeddedId;
@@ -12,11 +12,11 @@ public class CarroCliente {
 
     @EmbeddedId
     private final CarroClientePk id = new CarroClientePk();
-    private int ano;
+    private Integer ano;
 
     public CarroCliente(){}
 
-    public CarroCliente(Carro carro, Cliente cliente, int ano) {
+    public CarroCliente(Carro carro, Cliente cliente, Integer ano) {
         id.setCarro(carro);
         id.setCliente(cliente);
         this.ano = ano;
@@ -39,11 +39,11 @@ public class CarroCliente {
         id.setCliente(cliente);
     }
 
-    public int getAno() {
+    public Integer getAno() {
         return ano;
     }
 
-    public void setAno(int ano) {
+    public void setAno(Integer ano) {
         this.ano = ano;
     }
 
@@ -52,7 +52,7 @@ public class CarroCliente {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CarroCliente that = (CarroCliente) o;
-        return ano == that.ano &&
+        return ano.equals(that.ano) &&
                 Objects.equals(id, that.id);
     }
 

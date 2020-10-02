@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.data.converters;
 
 import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
-import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
+import com.lucasxavier.crmapi.domain.data.entities.CarroCliente;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroRepository;
 import com.lucasxavier.crmapi.domain.repositories.ClienteRepository;
@@ -46,7 +46,9 @@ public class CarroClienteConverter {
     }
 
     public List<CarroClienteDTO> convertListEntityToDTO(List<CarroCliente> carros){
-        return carros.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+        return carros.stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 
 

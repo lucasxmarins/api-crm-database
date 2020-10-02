@@ -2,7 +2,7 @@ package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
 import com.lucasxavier.crmapi.domain.data.dto.MontadoraDTO;
-import com.lucasxavier.crmapi.domain.data.models.Montadora;
+import com.lucasxavier.crmapi.domain.data.entities.Montadora;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.MontadoraRepository;

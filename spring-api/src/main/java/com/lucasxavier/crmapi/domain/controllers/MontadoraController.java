@@ -52,12 +52,12 @@ public class MontadoraController {
 
     @PostMapping
     public ResponseEntity<MontadoraDTO> insert(@RequestBody MontadoraDTO montadora) {
+        montadora = service.insert(montadora);
+        linkGenerator.createMontadoraLinks(montadora);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(montadora.getId()).toUri();
-        var montadoraDTO = service.insert(montadora);
-        linkGenerator.createMontadoraLinks(montadoraDTO);
 
-        return ResponseEntity.created(uri).body(montadoraDTO);
+        return ResponseEntity.created(uri).body(montadora);
     }
 
     @DeleteMapping(value = "/{id}")

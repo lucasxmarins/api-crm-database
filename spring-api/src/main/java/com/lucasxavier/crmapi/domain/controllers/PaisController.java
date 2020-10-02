@@ -49,14 +49,12 @@ public class PaisController {
 
     @PostMapping
     public ResponseEntity<PaisDTO> insert(@RequestBody PaisDTO pais) {
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{cod}").buildAndExpand(pais.getCodigo()).toUri();
         pais = service.insert(pais);
         linkGenerator.createPaisLinks(pais);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{cod}").buildAndExpand(pais.getCodigo()).toUri();
 
         return ResponseEntity.created(uri).body(pais);
-
-        //IdentifierGenerationException
     }
 
     @PutMapping(value = "/{cod}")

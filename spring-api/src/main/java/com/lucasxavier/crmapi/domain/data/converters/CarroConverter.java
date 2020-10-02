@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.data.converters;
 
 import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
-import com.lucasxavier.crmapi.domain.data.models.Carro;
+import com.lucasxavier.crmapi.domain.data.entities.Carro;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.MontadoraRepository;
 import org.springframework.stereotype.Service;
@@ -36,11 +36,14 @@ public class CarroConverter {
         Long montadoraId = carroDTO.getMontadoraId();
         carro.setMontadora(montadoraRepository.findById(montadoraId)
                 .orElseThrow(()-> new ResourceNotFoundException(montadoraId)));
+
         return carro;
     }
 
     public List<CarroDTO> convertListEntityToDTO(List<Carro> carros){
-        return carros.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+        return carros.stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 
 }

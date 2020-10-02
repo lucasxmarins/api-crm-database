@@ -21,20 +21,22 @@ public class LinkGenerator {
     }
 
     public void createCarroLinks(CarroDTO carro){
-        carro.add(linkTo(methodOn(CarroController.class).findById(carro.getId())).withSelfRel());
-        carro.add(linkTo(methodOn(MontadoraController.class).findById(carro.getMontadoraId())).withRel("montadora"));
-        carro.add(linkTo(methodOn(CarroController.class).findAllClientCars(carro.getId())).withRel("clientes"));
+        carro.add(linkTo(methodOn(CarroController.class)
+                .findById(carro.getId())).withSelfRel());
+        carro.add(linkTo(methodOn(MontadoraController.class)
+                .findById(carro.getMontadoraId())).withRel("montadora"));
+        carro.add(linkTo(methodOn(CarroController.class)
+                .findAllCarrosFromClienteByCarroId(carro.getId())).withRel("clientes"));
     }
     
     public void createCarroClienteLinks(CarroClienteDTO carroCliente){
         carroCliente.add(linkTo(methodOn(ClienteController.class)
-                .findCarroFromClienteById(carroCliente.getClienteId(), carroCliente.getCarroId())).withSelfRel());
+                .findCarroFromClienteById(carroCliente.getClienteId(), carroCliente.getCarroId()))
+                .withSelfRel());
         carroCliente.add(linkTo(methodOn(ClienteController.class)
                 .findById(carroCliente.getClienteId())).withRel("cliente"));
         carroCliente.add(linkTo(methodOn(CarroController.class)
                 .findById(carroCliente.getCarroId())).withRel("modelo"));
-        //carroCliente.add(linkTo(methodOn(ClienteController.class)
-        //        .findAllCarrosFromClient(carroCliente.getClienteId())).withRel("cliente_carros"));
     }
 
     public void createClienteLinks(ClienteDTO cliente){
@@ -43,15 +45,21 @@ public class LinkGenerator {
                 .findById(cliente.getId())).withSelfRel());
         cliente.add(linkTo(methodOn(ClienteController.class)
                 .findAllCarrosFromClient(cliente.getId())).withRel("carros"));
-        cliente.add(linkTo(methodOn(PaisController.class)
-                .findByCod(cliente.getPaisCod())).withRel("pais"));
 
-        Long profissaoId = profissaoRepository.findProfissaoByNome(cliente.getProfissaoNome())
-                .orElseThrow(()-> new ResourceNotFoundException(cliente.getProfissaoNome()))
-                .get(0).getId();
 
-        cliente.add(linkTo(methodOn(ProfissaoController.class)
-                .findById(profissaoId)).withRel("profissao"));
+        if(cliente.getPaisCod() != null) {
+            cliente.add(linkTo(methodOn(PaisController.class)
+                    .findByCod(cliente.getPaisCod())).withRel("pais"));
+        }
+
+        if(cliente.getProfissaoNome() != null) {
+            Long profissaoId = profissaoRepository.findProfissaoByNome(cliente.getProfissaoNome())
+                    .orElseThrow(() -> new ResourceNotFoundException(cliente.getProfissaoNome()))
+                    .get(0).getId();
+
+            cliente.add(linkTo(methodOn(ProfissaoController.class)
+                    .findById(profissaoId)).withRel("profissao"));
+        }
     }
 
     public void createMontadoraLinks(MontadoraDTO montadora){

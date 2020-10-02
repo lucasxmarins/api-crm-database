@@ -2,7 +2,7 @@ package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.CarroClienteConverter;
 import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
-import com.lucasxavier.crmapi.domain.data.models.CarroCliente;
+import com.lucasxavier.crmapi.domain.data.entities.CarroCliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.CarroClienteRepository;

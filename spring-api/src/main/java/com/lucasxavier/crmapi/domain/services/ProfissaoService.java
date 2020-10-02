@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
-import com.lucasxavier.crmapi.domain.data.models.Profissao;
+import com.lucasxavier.crmapi.domain.data.entities.Profissao;
 import com.lucasxavier.crmapi.domain.data.dto.ProfissaoDTO;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;

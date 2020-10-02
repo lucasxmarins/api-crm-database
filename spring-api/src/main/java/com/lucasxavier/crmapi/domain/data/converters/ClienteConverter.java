@@ -1,13 +1,17 @@
 package com.lucasxavier.crmapi.domain.data.converters;
 
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
-import com.lucasxavier.crmapi.domain.data.models.Cliente;
-import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
+import com.lucasxavier.crmapi.domain.data.entities.Cliente;
+import com.lucasxavier.crmapi.domain.data.entities.Pais;
+import com.lucasxavier.crmapi.domain.data.entities.Profissao;
 import com.lucasxavier.crmapi.domain.repositories.PaisRepository;
 import com.lucasxavier.crmapi.domain.repositories.ProfissaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +20,8 @@ public class ClienteConverter {
 
     private final PaisRepository paisRepository;
     private final ProfissaoRepository profissaoRepository;
+
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Autowired
     public ClienteConverter(PaisRepository paisRepository, ProfissaoRepository profissaoRepository){
@@ -35,15 +41,26 @@ public class ClienteConverter {
         clienteDTO.setCidade(cliente.getCidade());
         clienteDTO.setEmpresa(cliente.getEmpresa());
         clienteDTO.setEtnia(cliente.getEtnia());
-        clienteDTO.setNascimento(cliente.getNascimento());
-        clienteDTO.setPaisCod(cliente.getPais().getCodigo());
-        clienteDTO.setProfissaoNome(cliente.getProfissao().getNome());
+        clienteDTO.setNascimento(sdf.format(cliente.getNascimento().getTime()));
+
+        Pais pais = cliente.getPais();
+        Profissao profissao = cliente.getProfissao();
+
+        if (pais != null) {
+            clienteDTO.setPaisCod(pais.getCodigo());
+        }
+        if(profissao != null) {
+            clienteDTO.setProfissaoNome(profissao.getNome());
+        }
 
         return clienteDTO;
     }
 
-    public Cliente convertDTOToEntity(ClienteDTO clienteDTO){
+    public Cliente convertDTOToEntity(ClienteDTO clienteDTO) throws ParseException {
         var cliente = new Cliente();
+
+        Calendar nascimento = Calendar.getInstance();
+        nascimento.setTime(sdf.parse(clienteDTO.getNascimento()));
 
         cliente.setId(clienteDTO.getId());
         cliente.setPrimeiro_nome(clienteDTO.getPrimeiro_nome());
@@ -53,17 +70,21 @@ public class ClienteConverter {
         cliente.setCidade(clienteDTO.getCidade());
         cliente.setEmpresa(clienteDTO.getEmpresa());
         cliente.setEtnia(clienteDTO.getEtnia());
-        cliente.setNascimento(clienteDTO.getNascimento());
-        cliente.setPais(paisRepository.findByCod(clienteDTO.getPaisCod())
-                .orElseThrow(()-> new ResourceNotFoundException(clienteDTO.getPaisCod())).get(0));
-        cliente.setProfissao(profissaoRepository.findProfissaoByNome(clienteDTO.getProfissaoNome())
-                .orElseThrow(()-> new ResourceNotFoundException(clienteDTO.getProfissaoNome())).get(0));
+        cliente.setNascimento(nascimento);
+
+        paisRepository.findByCod(clienteDTO.getPaisCod())
+                .ifPresent(pais -> cliente.setPais(pais.get(0)));
+
+        profissaoRepository.findProfissaoByNome(clienteDTO.getProfissaoNome())
+                .ifPresent(profissao -> cliente.setProfissao(profissao.get(0)));
 
         return cliente;
     }
 
     public List<ClienteDTO> convertListClientesToDTO(List<Cliente> clientes){
-        return clientes.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+        return clientes.stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 
 }

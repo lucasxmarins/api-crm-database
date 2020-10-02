@@ -2,7 +2,7 @@ package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
 import com.lucasxavier.crmapi.domain.data.dto.PaisDTO;
-import com.lucasxavier.crmapi.domain.data.models.Pais;
+import com.lucasxavier.crmapi.domain.data.entities.Pais;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.PaisRepository;

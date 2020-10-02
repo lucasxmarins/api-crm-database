@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "api/clientes")
 public class ClienteController{
 
@@ -33,79 +34,84 @@ public class ClienteController{
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> findAll() {
         var clientesDTO = service.findAll();
+
         clientesDTO.forEach((clienteDTO)->
                 clienteDTO.add(WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(ClienteController.class)
                         .findById(clienteDTO.getId())).withSelfRel()));
+
         return ResponseEntity.ok().body(clientesDTO);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> findById(@PathVariable Long id) {
-        var clienteDTO = service.findById(id);
+    @GetMapping(value = "/{clienteId}")
+    public ResponseEntity<ClienteDTO> findById(@PathVariable Long clienteId) {
+        var clienteDTO = service.findById(clienteId);
         linkGenerator.createClienteLinks(clienteDTO);
         return ResponseEntity.ok().body(clienteDTO);
     }
 
     @PostMapping
     public ResponseEntity<ClienteDTO> insert(@RequestBody ClienteDTO cliente) {
+        cliente = service.insert(cliente);
+        linkGenerator.createClienteLinks(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(cliente.getId()).toUri();
-        var clienteDTO = service.insert(cliente);
-        linkGenerator.createClienteLinks(clienteDTO);
-        return ResponseEntity.created(uri).body(clienteDTO);
+        return ResponseEntity.created(uri).body(cliente);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> delete(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping(value = "/{clienteId}")
+    public ResponseEntity<ClienteDTO> delete(@PathVariable Long clienteId) {
+        service.delete(clienteId);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO cliente) {
-        var clienteDTO = service.update(id, cliente);
+    @PutMapping(value = "/{clienteId}")
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long clienteId, @RequestBody ClienteDTO cliente) {
+        var clienteDTO = service.update(clienteId, cliente);
         linkGenerator.createClienteLinks(clienteDTO);
         return ResponseEntity.ok().body(clienteDTO);
     }
 
     // CarroClient Methods ---------------------------------------------------------------------------
-    @GetMapping(value = "/{id}/carros")
-    public  ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClient(@PathVariable Long id){
-        var carros = carroClienteService.findAllCarrosFromClient(id);
+    @GetMapping(value = "/{clienteId}/carros")
+    public  ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClient(@PathVariable Long clienteId){
+        var carros = carroClienteService.findAllCarrosFromClient(clienteId);
         carros.forEach((carro)->
                 carro.add(WebMvcLinkBuilder.linkTo(
                 WebMvcLinkBuilder.methodOn(ClienteController.class)
-                .findCarroFromClienteById(id, carro.getCarroId())).withSelfRel()));
+                .findCarroFromClienteById(clienteId, carro.getCarroId())).withSelfRel()));
 
         return ResponseEntity.ok().body(carros);
     }
 
-    @GetMapping(value = "/{id}/carros/{carroId}")
-    public ResponseEntity<CarroClienteDTO> findCarroFromClienteById(@PathVariable Long id, @PathVariable Long carroId){
-        var carroDTO = carroClienteService.findCarroFromClienteById(id, carroId);
+    @GetMapping(value = "/{clienteId}/carros/{carroId}")
+    public ResponseEntity<CarroClienteDTO> findCarroFromClienteById(@PathVariable Long clienteId, @PathVariable Long carroId){
+        var carroDTO = carroClienteService.findCarroFromClienteById(clienteId, carroId);
         linkGenerator.createCarroClienteLinks(carroDTO);
         return ResponseEntity.ok().body(carroDTO);
     }
 
-    @PostMapping(value = "/{id}/carros")
-    public ResponseEntity<CarroClienteDTO> addCarroToCliente(@PathVariable Long id , @RequestBody CarroClienteDTO carro){
-        var carroDTO = carroClienteService.addCarroToCliente(id, carro);
+    @PostMapping(value = "/{clienteId}/carros")
+    public ResponseEntity<CarroClienteDTO> addCarroToCliente(@PathVariable Long clienteId , @RequestBody CarroClienteDTO carro){
+        carro = carroClienteService.addCarroToCliente(clienteId, carro);
         linkGenerator.createCarroClienteLinks(carro);
-        return ResponseEntity.ok().body(carroDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{carroId}").buildAndExpand(carro.getCarroId()).toUri();
+
+        return ResponseEntity.created(uri).body(carro);
     }
 
-    @PutMapping(value = "/{id}/carros/{carroId}")
-    public ResponseEntity<CarroClienteDTO> updateCarroFromCliente(@PathVariable Long id, @PathVariable Long carroId,
+    @PutMapping(value = "/{clienteId}/carros/{carroId}")
+    public ResponseEntity<CarroClienteDTO> updateCarroFromCliente(@PathVariable Long clienteId, @PathVariable Long carroId,
                                                                   @RequestBody CarroClienteDTO carro){
-        var carroDTO = carroClienteService.updateCarroFromCliente(id, carroId, carro);
+        var carroDTO = carroClienteService.updateCarroFromCliente(clienteId, carroId, carro);
         linkGenerator.createCarroClienteLinks(carroDTO);
         return ResponseEntity.ok().body(carroDTO);
     }
 
-    @DeleteMapping(value = "/{id}/carros/{carroId}")
-    public ResponseEntity<CarroClienteDTO> deleteCarroFromClienteById(@PathVariable Long id, @PathVariable Long carroId){
-        carroClienteService.deleteCarroFromCliente(id, carroId);
+    @DeleteMapping(value = "/{clienteId}/carros/{carroId}")
+    public ResponseEntity<CarroClienteDTO> deleteCarroFromClienteById(@PathVariable Long clienteId, @PathVariable Long carroId){
+        carroClienteService.deleteCarroFromCliente(clienteId, carroId);
         return ResponseEntity.noContent().build();
     }
 

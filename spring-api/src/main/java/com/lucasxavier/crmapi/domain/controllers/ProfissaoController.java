@@ -48,10 +48,11 @@ public class ProfissaoController {
 
     @PostMapping
     public ResponseEntity<ProfissaoDTO> insert(@RequestBody ProfissaoDTO profissao) {
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(profissao.getId()).toUri();
         profissao = service.insert(profissao);
         linkGenerator.createProfissaoLinks(profissao);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(profissao.getId()).toUri();
+
         return ResponseEntity.created(uri).body(profissao);
 
     }
@@ -79,7 +80,4 @@ public class ProfissaoController {
 
         return ResponseEntity.ok().body(clientes);
     }
-
-
-
 }

@@ -1,7 +1,7 @@
 package com.lucasxavier.crmapi.domain.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lucasxavier.crmapi.domain.data.models.Carro;
+import com.lucasxavier.crmapi.domain.data.entities.Carro;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;

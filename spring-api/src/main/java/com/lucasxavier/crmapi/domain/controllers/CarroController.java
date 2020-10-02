@@ -32,16 +32,16 @@ public class CarroController{
         this.linkGenerator = linkGenerator;
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<CarroDTO> delete(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping(value = "/{carroId}")
+    public ResponseEntity<CarroDTO> delete(@PathVariable Long carroId) {
+        service.delete(carroId);
         return ResponseEntity.noContent().build();
     }
 
     // V2
-    @GetMapping(value = "/{id}", produces = {"application/json", "application/xml"})
-    public ResponseEntity<CarroDTO> findById(@PathVariable Long id) {
-        CarroDTO carro = service.findByIdV2(id);
+    @GetMapping(value = "/{carroId}", produces = {"application/json", "application/xml"})
+    public ResponseEntity<CarroDTO> findById(@PathVariable Long carroId) {
+        CarroDTO carro = service.findByIdV2(carroId);
         linkGenerator.createCarroLinks(carro);
         return ResponseEntity.ok().body(carro);
     }
@@ -60,26 +60,26 @@ public class CarroController{
             consumes = {"application/json", "application/xml"})
     public ResponseEntity<CarroDTO> insert(@RequestBody CarroDTO carro) {
         carro = service.insertV2(carro);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{carroId}")
                 .buildAndExpand(carro.getId()).toUri();
         linkGenerator.createCarroLinks(carro);
         return ResponseEntity.created(uri).body(carro);
     }
 
-    @PutMapping(value = "/{id}",
+    @PutMapping(value = "/{carroId}",
             produces = {"application/json", "application/xml"},
             consumes = {"application/json", "application/xml"})
-    public ResponseEntity<CarroDTO> update(@PathVariable Long id, @RequestBody CarroDTO carro) {
-        carro = service.updateV2(id, carro);
+    public ResponseEntity<CarroDTO> update(@PathVariable Long carroId, @RequestBody CarroDTO carro) {
+        carro = service.updateV2(carroId, carro);
         linkGenerator.createCarroLinks(carro);
         return ResponseEntity.ok().body(carro);
     }
 
     // Associated method -----------------------------------------------------------------------------------
 
-    @GetMapping(value = "/{id}/clientes", produces = {"application/json", "application/xml"})
-    public ResponseEntity<List<CarroClienteDTO>> findAllClientCars(@PathVariable Long id){
-        var carros = carroClienteService.findAllCarrosFromClientesByCarroId(id);
+    @GetMapping(value = "/{carroId}/clientes", produces = {"application/json", "application/xml"})
+    public ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClienteByCarroId(@PathVariable Long carroId){
+        var carros = carroClienteService.findAllCarrosFromClientesByCarroId(carroId);
         carros.forEach(carro -> carro.add(
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClienteController.class)
                         .findCarroFromClienteById(carro.getClienteId(), carro.getCarroId())).withSelfRel()));

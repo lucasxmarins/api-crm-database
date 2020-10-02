@@ -1,6 +1,6 @@
 package com.lucasxavier.crmapi.domain.repositories;
 
-import com.lucasxavier.crmapi.domain.data.models.Cliente;
+import com.lucasxavier.crmapi.domain.data.entities.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

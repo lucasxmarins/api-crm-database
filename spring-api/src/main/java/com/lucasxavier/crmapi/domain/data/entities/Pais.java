@@ -1,4 +1,4 @@
-package com.lucasxavier.crmapi.domain.data.models;
+package com.lucasxavier.crmapi.domain.data.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

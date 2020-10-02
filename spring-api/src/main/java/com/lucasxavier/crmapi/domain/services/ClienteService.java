@@ -1,10 +1,10 @@
 package com.lucasxavier.crmapi.domain.services;
 
 import com.lucasxavier.crmapi.domain.data.converters.ClienteConverter;
-import com.lucasxavier.crmapi.domain.data.converters.DefaultConverter;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
-import com.lucasxavier.crmapi.domain.data.models.Cliente;
+import com.lucasxavier.crmapi.domain.data.entities.Cliente;
 import com.lucasxavier.crmapi.domain.exceptions.DatabaseException;
+import com.lucasxavier.crmapi.domain.exceptions.InvalidDataException;
 import com.lucasxavier.crmapi.domain.exceptions.ResourceNotFoundException;
 import com.lucasxavier.crmapi.domain.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -37,20 +38,27 @@ public class ClienteService {
 
     public ClienteDTO insert(ClienteDTO clienteDTO) {
         try {
-            var cliente = DefaultConverter.parseObject(clienteDTO, Cliente.class);
+            var cliente = converter.convertDTOToEntity(clienteDTO);
             return converter.convertEntityToDTO(repository.save(cliente));
 
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
+        }
+        catch (ParseException e){
+            throw new InvalidDataException(e.getMessage()+
+                    ". Formato de data aceitável: DD/MM/AAAA");
         }
     }
 
     public void delete(Long id) {
         try {
             repository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
-        } catch (EmptyResultDataAccessException e) {
+        }
+        catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(e.getMessage());
         }
     }
@@ -61,10 +69,15 @@ public class ClienteService {
             updateData(current, converter.convertDTOToEntity(updated));
             return converter.convertEntityToDTO(repository.save(current));
 
-        } catch (EmptyResultDataAccessException e) {
+        }
+        catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(e.getMessage());
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
+        }
+        catch (ParseException e){
+            throw new InvalidDataException(e.getMessage());
         }
     }
 
@@ -101,5 +114,4 @@ public class ClienteService {
                 .orElseThrow(()-> new ResourceNotFoundException(id));
         return converter.convertListClientesToDTO(clientesDTO);
     }
-
 }
