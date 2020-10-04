@@ -5,6 +5,8 @@ import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.CarroDTO;
 import com.lucasxavier.crmapi.domain.services.CarroClienteService;
 import com.lucasxavier.crmapi.domain.services.CarroService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,9 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Api(value = "Carro", tags = {"Carro Endpoint"})
 @RestController
-@RequestMapping(value = "/api/carros")
+@RequestMapping(value = "carros")
 public class CarroController{
 
     private final CarroService service;
@@ -32,6 +35,7 @@ public class CarroController{
         this.linkGenerator = linkGenerator;
     }
 
+    @ApiOperation(value="Delete Car", tags = {"Carro"})
     @DeleteMapping(value = "/{carroId}")
     public ResponseEntity<CarroDTO> delete(@PathVariable Long carroId) {
         service.delete(carroId);
@@ -39,6 +43,7 @@ public class CarroController{
     }
 
     // V2
+    @ApiOperation(value = "Get Car", tags = {"Carro"})
     @GetMapping(value = "/{carroId}", produces = {"application/json", "application/xml"})
     public ResponseEntity<CarroDTO> findById(@PathVariable Long carroId) {
         CarroDTO carro = service.findByIdV2(carroId);
@@ -46,6 +51,7 @@ public class CarroController{
         return ResponseEntity.ok().body(carro);
     }
 
+    @ApiOperation(value ="Get list of all Cars", tags = {"Carro"})
     @GetMapping(produces = {"application/json", "application/xml"})
     public ResponseEntity<List<CarroDTO>> findAll() {
         List<CarroDTO> carros = service.findAllV2();
@@ -56,6 +62,7 @@ public class CarroController{
         return ResponseEntity.ok().body(carros);
     }
 
+    @ApiOperation(value = "Add new Car", tags = {"Carro"})
     @PostMapping(produces = {"application/json", "application/xml"},
             consumes = {"application/json", "application/xml"})
     public ResponseEntity<CarroDTO> insert(@RequestBody CarroDTO carro) {
@@ -66,6 +73,7 @@ public class CarroController{
         return ResponseEntity.created(uri).body(carro);
     }
 
+    @ApiOperation(value ="Update Car", tags = {"Carro"})
     @PutMapping(value = "/{carroId}",
             produces = {"application/json", "application/xml"},
             consumes = {"application/json", "application/xml"})
@@ -77,8 +85,9 @@ public class CarroController{
 
     // Associated method -----------------------------------------------------------------------------------
 
+    @ApiOperation(value ="Get list of all Cars that have Customers", tags = {"Carro"})
     @GetMapping(value = "/{carroId}/clientes", produces = {"application/json", "application/xml"})
-    public ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClienteByCarroId(@PathVariable Long carroId){
+    public ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClientes(@PathVariable Long carroId){
         var carros = carroClienteService.findAllCarrosFromClientesByCarroId(carroId);
         carros.forEach(carro -> carro.add(
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClienteController.class)

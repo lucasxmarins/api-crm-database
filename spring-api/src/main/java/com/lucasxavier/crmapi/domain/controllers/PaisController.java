@@ -5,6 +5,8 @@ import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.PaisDTO;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
 import com.lucasxavier.crmapi.domain.services.PaisService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Api(value = "Pais", tags = {"Pais Endpoint"})
 @RestController
-@RequestMapping(value = "/api/paises")
+@RequestMapping(value = "paises")
 public class PaisController {
 
     private final PaisService service;
@@ -29,7 +32,8 @@ public class PaisController {
         this.linkGenerator = linkGenerator;
     }
 
-    @GetMapping
+    @ApiOperation(value ="Get list of all Countries", tags = {"Pais"})
+    @GetMapping(produces = {"application/json", "application/xml"})
     public ResponseEntity<List<PaisDTO>> findAll() {
         var paises = service.findAll();
         paises.forEach(pais -> pais.add(
@@ -39,7 +43,8 @@ public class PaisController {
         return ResponseEntity.ok().body(paises);
     }
 
-    @GetMapping(value = "/{cod}")
+    @ApiOperation(value ="Get Country", tags = {"Pais"})
+    @GetMapping(value = "/{cod}", produces = {"application/json", "application/xml"})
     public ResponseEntity<PaisDTO> findByCod(@PathVariable String cod) {
         var pais = service.findByCod(cod).get(0);
         linkGenerator.createPaisLinks(pais);
@@ -47,7 +52,9 @@ public class PaisController {
         return ResponseEntity.ok().body(pais);
     }
 
-    @PostMapping
+    @ApiOperation(value ="Add new Country", tags = {"Pais"})
+    @PostMapping(produces = {"application/json", "application/xml"},
+                 consumes = {"application/json", "application/xml"})
     public ResponseEntity<PaisDTO> insert(@RequestBody PaisDTO pais) {
         pais = service.insert(pais);
         linkGenerator.createPaisLinks(pais);
@@ -57,7 +64,10 @@ public class PaisController {
         return ResponseEntity.created(uri).body(pais);
     }
 
-    @PutMapping(value = "/{cod}")
+    @ApiOperation(value ="Update Country", tags = {"Pais"})
+    @PutMapping(value = "/{cod}",
+                produces = {"application/json", "application/xml"},
+                consumes = {"application/json", "application/xml"})
     public ResponseEntity<PaisDTO> update(@PathVariable String cod, @RequestBody PaisDTO pais) {
         pais = service.update(cod, pais);
         linkGenerator.createPaisLinks(pais);
@@ -65,6 +75,7 @@ public class PaisController {
         return ResponseEntity.ok().body(pais);
     }
 
+    @ApiOperation(value ="Delete Country", tags = {"Pais"})
     @DeleteMapping(value = "/{cod}")
     public ResponseEntity<PaisDTO> delete(@PathVariable String cod) {
         service.delete(cod);
@@ -72,8 +83,9 @@ public class PaisController {
 
     }
 
-    // Associated Getter
-    @GetMapping(value = "/{cod}/clientes")
+    // Associated Getter ----------------------------------------------------------------------------------------
+    @ApiOperation(value ="Get all Customers from Country", tags = {"Pais", "Cliente"})
+    @GetMapping(value = "/{cod}/clientes", produces = {"application/json", "application/xml"})
     public ResponseEntity<List<ClienteDTO>> findAllClientesByPais(@PathVariable String cod){
         var clientes = clienteService.findAllClientesByPaisCod(cod);
         clientes.forEach(cliente -> cliente.add(

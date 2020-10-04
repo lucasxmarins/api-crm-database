@@ -26,7 +26,7 @@ public class LinkGenerator {
         carro.add(linkTo(methodOn(MontadoraController.class)
                 .findById(carro.getMontadoraId())).withRel("montadora"));
         carro.add(linkTo(methodOn(CarroController.class)
-                .findAllCarrosFromClienteByCarroId(carro.getId())).withRel("clientes"));
+                .findAllCarrosFromClientes(carro.getId())).withRel("clientes"));
     }
     
     public void createCarroClienteLinks(CarroClienteDTO carroCliente){

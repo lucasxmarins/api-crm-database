@@ -5,6 +5,8 @@ import com.lucasxavier.crmapi.domain.data.dto.CarroClienteDTO;
 import com.lucasxavier.crmapi.domain.data.dto.ClienteDTO;
 import com.lucasxavier.crmapi.domain.services.CarroClienteService;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Api(value = "Cliente", tags = {"Cliente Endpoint"})
 @RestController
-@CrossOrigin
-@RequestMapping(value = "api/clientes")
+@RequestMapping(value = "clientes")
 public class ClienteController{
 
     private final ClienteService service;
@@ -31,7 +33,8 @@ public class ClienteController{
         this.linkGenerator = linkGenerator;
     }
 
-    @GetMapping
+    @ApiOperation(value ="Get list of all Customers", tags = {"Cliente"})
+    @GetMapping(produces = {"application/json", "application/xml"})
     public ResponseEntity<List<ClienteDTO>> findAll() {
         var clientesDTO = service.findAll();
 
@@ -43,14 +46,17 @@ public class ClienteController{
         return ResponseEntity.ok().body(clientesDTO);
     }
 
-    @GetMapping(value = "/{clienteId}")
+    @ApiOperation(value ="Get Customer", tags = {"Cliente"})
+    @GetMapping(value = "/{clienteId}", produces = {"application/json", "application/xml"})
     public ResponseEntity<ClienteDTO> findById(@PathVariable Long clienteId) {
         var clienteDTO = service.findById(clienteId);
         linkGenerator.createClienteLinks(clienteDTO);
         return ResponseEntity.ok().body(clienteDTO);
     }
 
-    @PostMapping
+    @ApiOperation(value ="Add new Customer", tags = {"Cliente"})
+    @PostMapping(produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<ClienteDTO> insert(@RequestBody ClienteDTO cliente) {
         cliente = service.insert(cliente);
         linkGenerator.createClienteLinks(cliente);
@@ -59,13 +65,17 @@ public class ClienteController{
         return ResponseEntity.created(uri).body(cliente);
     }
 
+    @ApiOperation(value ="Delete Customer", tags = {"Cliente"})
     @DeleteMapping(value = "/{clienteId}")
     public ResponseEntity<ClienteDTO> delete(@PathVariable Long clienteId) {
         service.delete(clienteId);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{clienteId}")
+    @ApiOperation(value ="Update Customer", tags = {"Cliente"})
+    @PutMapping(value = "/{clienteId}",
+            produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<ClienteDTO> update(@PathVariable Long clienteId, @RequestBody ClienteDTO cliente) {
         var clienteDTO = service.update(clienteId, cliente);
         linkGenerator.createClienteLinks(clienteDTO);
@@ -73,7 +83,9 @@ public class ClienteController{
     }
 
     // CarroClient Methods ---------------------------------------------------------------------------
-    @GetMapping(value = "/{clienteId}/carros")
+
+    @ApiOperation(value ="Get list of all Cars from given Customer", tags = {"Cliente"})
+    @GetMapping(value = "/{clienteId}/carros", produces = {"application/json", "application/xml"})
     public  ResponseEntity<List<CarroClienteDTO>> findAllCarrosFromClient(@PathVariable Long clienteId){
         var carros = carroClienteService.findAllCarrosFromClient(clienteId);
         carros.forEach((carro)->
@@ -84,14 +96,18 @@ public class ClienteController{
         return ResponseEntity.ok().body(carros);
     }
 
-    @GetMapping(value = "/{clienteId}/carros/{carroId}")
+    @ApiOperation(value ="Get Car from Customer", tags = {"Cliente"})
+    @GetMapping(value = "/{clienteId}/carros/{carroId}", produces = {"application/json", "application/xml"})
     public ResponseEntity<CarroClienteDTO> findCarroFromClienteById(@PathVariable Long clienteId, @PathVariable Long carroId){
         var carroDTO = carroClienteService.findCarroFromClienteById(clienteId, carroId);
         linkGenerator.createCarroClienteLinks(carroDTO);
         return ResponseEntity.ok().body(carroDTO);
     }
 
-    @PostMapping(value = "/{clienteId}/carros")
+    @ApiOperation(value ="Add Car to Customer", tags = {"Cliente"})
+    @PostMapping(value = "/{clienteId}/carros",
+            produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<CarroClienteDTO> addCarroToCliente(@PathVariable Long clienteId , @RequestBody CarroClienteDTO carro){
         carro = carroClienteService.addCarroToCliente(clienteId, carro);
         linkGenerator.createCarroClienteLinks(carro);
@@ -101,7 +117,10 @@ public class ClienteController{
         return ResponseEntity.created(uri).body(carro);
     }
 
-    @PutMapping(value = "/{clienteId}/carros/{carroId}")
+    @ApiOperation(value ="Update Car from Customer", tags = {"Cliente"})
+    @PutMapping(value = "/{clienteId}/carros/{carroId}",
+            produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<CarroClienteDTO> updateCarroFromCliente(@PathVariable Long clienteId, @PathVariable Long carroId,
                                                                   @RequestBody CarroClienteDTO carro){
         var carroDTO = carroClienteService.updateCarroFromCliente(clienteId, carroId, carro);
@@ -109,6 +128,7 @@ public class ClienteController{
         return ResponseEntity.ok().body(carroDTO);
     }
 
+    @ApiOperation(value ="Delete Car From Customer", tags = {"Cliente"})
     @DeleteMapping(value = "/{clienteId}/carros/{carroId}")
     public ResponseEntity<CarroClienteDTO> deleteCarroFromClienteById(@PathVariable Long clienteId, @PathVariable Long carroId){
         carroClienteService.deleteCarroFromCliente(clienteId, carroId);

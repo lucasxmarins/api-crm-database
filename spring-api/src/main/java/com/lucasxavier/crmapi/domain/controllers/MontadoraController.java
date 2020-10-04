@@ -7,6 +7,8 @@ import com.lucasxavier.crmapi.domain.data.dto.MontadoraDTO;
 import com.lucasxavier.crmapi.domain.services.CarroService;
 import com.lucasxavier.crmapi.domain.services.ClienteService;
 import com.lucasxavier.crmapi.domain.services.MontadoraService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Api(value = "Montadora", tags = {"Montadora Endpoint"})
 @RestController
-@RequestMapping(value = "/api/montadoras")
+@RequestMapping(value = "montadoras")
 public class MontadoraController {
 
     private final MontadoraService service;
@@ -33,7 +36,8 @@ public class MontadoraController {
         this.linkGenerator = linkGenerator;
     }
 
-    @GetMapping
+    @ApiOperation(value ="Get list of all Manufacturers", tags = {"Montadora"})
+    @GetMapping(produces = {"application/json", "application/xml"})
     public ResponseEntity<List<MontadoraDTO>> findAll() {
         var montadorasDTO = service.findAll();
         montadorasDTO.forEach(montadoraDTO ->
@@ -42,7 +46,8 @@ public class MontadoraController {
         return ResponseEntity.ok().body(montadorasDTO);
     }
 
-    @GetMapping(value = "/{id}")
+    @ApiOperation(value ="Get Manufacturer", tags = {"Montadora"})
+    @GetMapping(value = "/{id}", produces = {"application/json", "application/xml"})
     public ResponseEntity<MontadoraDTO> findById(@PathVariable Long id) {
         var montadoraDTO = service.findById(id);
         linkGenerator.createMontadoraLinks(montadoraDTO);
@@ -50,7 +55,9 @@ public class MontadoraController {
         return ResponseEntity.ok().body(montadoraDTO);
     }
 
-    @PostMapping
+    @ApiOperation(value ="Add new Manufacturer", tags = {"Montadora"})
+    @PostMapping(produces = {"application/json", "application/xml"},
+                 consumes = {"application/json", "application/xml"})
     public ResponseEntity<MontadoraDTO> insert(@RequestBody MontadoraDTO montadora) {
         montadora = service.insert(montadora);
         linkGenerator.createMontadoraLinks(montadora);
@@ -60,13 +67,17 @@ public class MontadoraController {
         return ResponseEntity.created(uri).body(montadora);
     }
 
+    @ApiOperation(value ="Delete Manufacturer", tags = {"Montadora"})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<MontadoraDTO> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
+    @ApiOperation(value ="Update Manufacturer", tags = {"Montadora"})
+    @PutMapping(value = "/{id}",
+            produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<MontadoraDTO> update(@PathVariable Long id, @RequestBody MontadoraDTO montadora) {
         var montadoraDTO = service.update(id, montadora);
         linkGenerator.createMontadoraLinks(montadoraDTO);
@@ -75,7 +86,8 @@ public class MontadoraController {
     }
 
     // Associated Getter
-    @GetMapping(value = "/{id}/carros")
+    @ApiOperation(value ="Get list of all Cars from Manufacturer", tags = {"Montadora", "Carro"})
+    @GetMapping(value = "/{id}/carros", produces = {"application/json", "application/xml"})
     public ResponseEntity<List<CarroDTO>> findAllCarrosByMontadoraId(@PathVariable long id){
         var carrosDTO = carroService.findAllCarrosByMontadoraId(id);
         carrosDTO.forEach(carro ->
@@ -86,7 +98,8 @@ public class MontadoraController {
         return ResponseEntity.ok().body(carrosDTO);
     }
 
-    @GetMapping(value = "/{id}/clientes")
+    @ApiOperation(value ="Get list of all Customers from Manufacturer", tags = {"Montadora", "Cliente"})
+    @GetMapping(value = "/{id}/clientes", produces = {"application/json", "application/xml"})
     public ResponseEntity<List<ClienteDTO>> findAllClientesByMontadoraId(@PathVariable long id){
         var clientesDTO = clienteService.findAllClientesByMontadoraId(id);
         clientesDTO.forEach(carro ->
@@ -96,7 +109,5 @@ public class MontadoraController {
 
         return ResponseEntity.ok().body(clientesDTO);
     }
-
-
 
 }
