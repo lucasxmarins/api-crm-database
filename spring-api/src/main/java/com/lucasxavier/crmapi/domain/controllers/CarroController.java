@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Api(value = "Carro", tags = {"Carro Endpoint"})
 @RestController
-@RequestMapping(value = "carros")
+@RequestMapping(value = "/api/carros")
 public class CarroController{
 
     private final CarroService service;

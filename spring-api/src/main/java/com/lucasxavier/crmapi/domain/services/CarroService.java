@@ -25,7 +25,6 @@ public class CarroService {
         this.converter = converter;
     }
 
-    // N apagar
     public void delete(Long id) {
         try {
             repository.deleteById(id);

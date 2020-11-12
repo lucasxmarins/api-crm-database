@@ -19,7 +19,7 @@ import java.util.List;
 
 @Api(value = "Montadora", tags = {"Montadora Endpoint"})
 @RestController
-@RequestMapping(value = "montadoras")
+@RequestMapping(value = "api/montadoras")
 public class MontadoraController {
 
     private final MontadoraService service;

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Api(value = "Pais", tags = {"Pais Endpoint"})
 @RestController
-@RequestMapping(value = "paises")
+@RequestMapping(value = "/api/paises")
 public class PaisController {
 
     private final PaisService service;

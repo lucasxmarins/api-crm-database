@@ -1,5 +1,7 @@
 package com.lucasxavier.crmapi.domain.data.entities;
 
+import com.lucasxavier.crmapi.domain.security.User;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -34,6 +36,9 @@ public class Cliente {
 
     @OneToMany(mappedBy = "id.cliente")
     private final Set<CarroCliente> carros = new HashSet<>();
+
+    @OneToOne(mappedBy = "cliente")
+    private User user;
 
     public Cliente() {
     }

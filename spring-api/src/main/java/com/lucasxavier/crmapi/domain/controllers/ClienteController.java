@@ -18,7 +18,7 @@ import java.util.List;
 
 @Api(value = "Cliente", tags = {"Cliente Endpoint"})
 @RestController
-@RequestMapping(value = "clientes")
+@RequestMapping(value = "/api/clientes")
 public class ClienteController{
 
     private final ClienteService service;
